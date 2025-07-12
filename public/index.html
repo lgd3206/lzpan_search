@@ -1,191 +1,821 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>迷思爱PHP编程 - 阿里云盘搜索导航</title>
-    <meta
-      name="keywords"
-      content="阿里云搜索,阿里云盘搜索,阿里云盘搜索资源,阿里网盘搜索,阿里云盘搜索网站,阿里云搜索引擎,阿里云资源分享,阿里云网盘资源搜索引擎,阿里云盘资源分享"
-    />
-    <meta
-      name="description"
-      content="懒盘搜索网站提供阿里云盘搜索服务，也提供搜索引擎导航服务。为您提供全网可以搜索阿里云盘的网站的导航。"
-    />
-    <meta
-      name="google-site-verification"
-      content="Y93ag2Uj2WqRIvVbqE4NnMHf3UPR5Dh9UJqDk_CZ6io"
-    />
-
-    <script src=" https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>资源搜 - 网盘资源搜索引擎导航 | ziyuanso.net</title>
+    <meta name="keywords" content="网盘搜索,资源搜索,百度云盘,夸克网盘,迅雷云盘,阿里云盘,网盘资源,电影资源,软件下载,资源搜" />
+    <meta name="description" content="资源搜(ziyuanso.net) - 专业的网盘资源搜索引擎导航，集成多个优质搜索引擎，一站式搜索全网网盘资源。" />
+    <meta name="google-site-verification" content="Y93ag2Uj2WqRIvVbqE4NnMHf3UPR5Dh9UJqDk_CZ6io" />
+    
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-  </head>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <body>
-    <header>
-      <div class="brand">
-        <a href="./">
-          <img
-            src="https://wimg.misiyu.cn/images/2020/8/2020-08-10_49a0d834c52e8582e77ebfc5bec584e0.png?x-oss-process=style/common"
-            alt="懒盘聚合搜索"
-          />
-          <span class="title">懒盘搜索</span>
-        </a>
-      </div>
-      <div class="right-bar">
-        <ul class="menus">
-          <!-- <li class="menu">
-                    <a href="#">网盘搜索</a>
-                </li> -->
-        </ul>
-        <div class="search">
-          <input
-            type="text"
-            id="search-input"
-            placeholder="对于某些网站，可直接搜索"
-            aria-label="search"
-            autofocus
-          />
-          <button id="search-btn">搜索</button>
-        </div>
-        <ul class="other-links">
-          <li class="link">
-            <a
-              href="https://www.baidu.com/s?ie=UTF-8&wd=%E6%87%92%E7%9B%98%E6%90%9C%E7%B4%A2"
-              target="_blank"
-              >百度搜索</a
-            >
-          </li>
-          <!-- <li class="link">
-            <a
-              href="https://dmdy5.vip/"
-              rel="noreferer nofollow"
-              target="_blank"
-              >大米星球</a
-            >
-          </li> -->
-          <li class="link">
-            <a target="_blank" href="https://mall.misiai.com">淘宝优惠券</a>
-          </li>
-          <li class="link">
-            <a
-              target="_blank"
-              href="https://github.com/Xwudao/lzpan_search/issues/2"
-              >提交站点</a
-            >
-          </li>
-          <li class="menu">
-            <a
-              href="https://box.misiai.com"
-              style="color: orange"
-              target="_blank"
-              >专业导航</a
-            >
-          </li>
-        </ul>
-        <div class="github">
-          <!-- <a target="_blank" href="https://github.com/Xwudao/lzpan_search">Github</a> -->
-        </div>
-      </div>
-    </header>
-    <main>
-      <div class="left">
-        <ul class="site-list">
-          <!-- <li class="site">
-                    <img src="https://i.olsh.me/icon?size=80..120..200&url=kilig.ujuji.com" alt="">
-                    <div class="text">搜索链接</div>
-                </li> -->
-        </ul>
-        <section class="ad-area">
-          <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5992841380729226"
-            crossorigin="anonymous"
-          ></script>
-          <ins
-            class="adsbygoogle"
-            style="display: block; text-align: center"
-            data-ad-layout="in-article"
-            data-ad-format="fluid"
-            data-ad-client="ca-pub-5992841380729226"
-            data-ad-slot="5302343622"
-          ></ins>
-          <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
-        </section>
-      </div>
-      <div class="right">
-        <div class="loading" id="loading">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <div class="err" id="err">加载错误，请刷新或者更换其他网站</div>
-        <iframe
-          name="search"
-          src="https://misiyu.cn"
-          frameborder="0"
-          allowfullscreen
-          allowpaymentrequest="true"
-        ></iframe>
-      </div>
-    </main>
-    <footer>
-      <span class="span">&copy;2019-<em id="year"></em></span>
-      <span><a target="_blank" href="https://lzpan.com">懒盘</a></span>
-      <span
-        ><a target="_blank" style="color: orange" href="https://hunhepan.com"
-          >混合盘</a
-        ></span
-      >
-      <!-- <span><a target="_blank" href="https://ihothub.com">爱热榜</a></span> -->
-      <span><a target="_blank" href="https://ujuji.com">优聚集</a></span>
-      <span
-        ><a target="_blank" href="https://mall.misiai.com">淘宝优惠券</a></span
-      >
-      <span><a target="_blank" href="https://nav.ujuji.com">无道书签</a></span>
-      <span
-        ><a target="_blank" href="https://beian.miit.gov.cn/"
-          >蜀ICP备19005797号-3</a
-        ></span
-      >
-      <iframe
-        src="https://ghbtns.com/github-btn.html?user=Xwudao&repo=lzpan_search&type=star&count=true"
-        frameborder="0"
-        scrolling="0"
-        style="
-          height: 20px;
-          max-width: 108px;
-          padding-left: 5px;
-          box-sizing: border-box;
-          margin-bottom: -5px;
-          display: unset !important;
-        "
-      ></iframe>
-    </footer>
-  </body>
-  <script
-    type="text/javascript"
-    src="https://js.users.51.la/20403707.js"
-  ></script>
-  <script
-    charset="UTF-8"
-    id="LA_COLLECT"
-    src="//sdk.51.la/js-sdk-pro.min.js"
-  ></script>
-  <script>
-    LA.init({ id: "JMDv2UuvpJVq6AnI", ck: "JMDv2UuvpJVq6AnI" });
-  </script>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-50DXKMPYGG"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
 
-  gtag('config', 'G-50DXKMPYGG');
-</script>
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 头部样式 */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .brand img {
+            width: 40px;
+            height: 40px;
+            margin-right: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .brand .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-search {
+            display: flex;
+            background: white;
+            border-radius: 25px;
+            padding: 0.3rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            min-width: 300px;
+        }
+
+        .header-search input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .header-search button {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .header-search button:hover {
+            background: #5a6fd8;
+        }
+
+        .header-links {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+        }
+
+        .header-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .header-links a:hover {
+            color: #667eea;
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        /* 左侧搜索引擎列表 */
+        .engines-sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-title::before {
+            content: "🔍";
+            margin-right: 0.5rem;
+        }
+
+        .engines-list {
+            list-style: none;
+        }
+
+        .engine-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .engine-item:hover {
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        .engine-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .engine-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            margin-right: 0.8rem;
+            object-fit: cover;
+        }
+
+        .engine-info {
+            flex: 1;
+        }
+
+        .engine-name {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .engine-desc {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.2rem;
+        }
+
+        .engine-item.active .engine-desc {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* 广告区域 */
+        .ad-sidebar {
+            margin-top: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* 右侧内容区域 */
+        .content-area {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        /* 欢迎页面 */
+        .welcome-screen {
+            padding: 3rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-logo {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* 热门搜索 */
+        .hot-searches {
+            background: white;
+            padding: 1.5rem;
+            margin: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .hot-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .hot-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .hot-tag {
+            background: #f8f9fa;
+            color: #666;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .hot-tag:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* 加载和错误状态 */
+        .loading {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            gap: 0.5rem;
+        }
+
+        .loading span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: loading 1.4s ease-in-out infinite both;
+        }
+
+        .loading span:nth-child(1) { animation-delay: -0.32s; }
+        .loading span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes loading {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .error-message {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: #dc3545;
+            font-size: 1.1rem;
+        }
+
+        /* iframe样式 */
+        .search-iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            display: none;
+        }
+
+        /* 底部 */
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #667eea;
+        }
+
+        .footer-info {
+            color: #888;
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 300px 1fr;
+                gap: 1rem;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .header-search {
+                min-width: 250px;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .engines-sidebar {
+                order: 2;
+            }
+
+            .content-area {
+                order: 1;
+            }
+
+            .welcome-title {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .welcome-screen {
+                padding: 2rem 1rem;
+            }
+
+            .welcome-title {
+                font-size: 1.5rem;
+            }
+
+            .welcome-subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <nav class="nav">
+                <a href="./" class="brand">
+                    <img src="https://wimg.misiyu.cn/images/2020/8/2020-08-10_49a0d834c52e8582e77ebfc5bec584e0.png?x-oss-process=style/common" alt="资源搜" />
+                    <span class="title">资源搜</span>
+                </a>
+                
+                <div class="header-right">
+                    <div class="header-search">
+                        <input type="text" id="header-search-input" placeholder="快速搜索资源..." />
+                        <button id="header-search-btn">搜索</button>
+                    </div>
+                    
+                    <ul class="header-links">
+                        <li><a href="https://www.baidu.com/s?ie=UTF-8&wd=资源搜" target="_blank">百度搜索</a></li>
+                        <li><a href="https://github.com/Xwudao/lzpan_search/issues/2" target="_blank">提交站点</a></li>
+                        <li><a href="https://box.misiai.com" target="_blank" style="color: orange;">专业导航</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <aside class="engines-sidebar">
+                <h2 class="sidebar-title">搜索引擎</h2>
+                <ul class="engines-list" id="engines-list">
+                    <!-- 搜索引擎列表将动态生成 -->
+                </ul>
+                
+                <div class="hot-searches">
+                    <h3 class="hot-title">🔥 热门搜索</h3>
+                    <div class="hot-tags">
+                        <span class="hot-tag" onclick="quickSearch('电影')">电影</span>
+                        <span class="hot-tag" onclick="quickSearch('电视剧')">电视剧</span>
+                        <span class="hot-tag" onclick="quickSearch('音乐')">音乐</span>
+                        <span class="hot-tag" onclick="quickSearch('软件')">软件</span>
+                        <span class="hot-tag" onclick="quickSearch('游戏')">游戏</span>
+                        <span class="hot-tag" onclick="quickSearch('学习资料')">学习资料</span>
+                        <span class="hot-tag" onclick="quickSearch('电子书')">电子书</span>
+                        <span class="hot-tag" onclick="quickSearch('纪录片')">纪录片</span>
+                    </div>
+                </div>
+
+                <div class="ad-sidebar">
+                    <!-- Google AdSense -->
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5992841380729226" crossorigin="anonymous"></script>
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5992841380729226" data-ad-slot="5302343622" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                </div>
+            </aside>
+
+            <section class="content-area">
+                <div class="welcome-screen" id="welcome-screen">
+                    <div class="welcome-content">
+                        <div class="welcome-logo">🔍</div>
+                        <h1 class="welcome-title">资源搜</h1>
+                        <p class="welcome-subtitle">一站式网盘资源搜索引擎导航</p>
+                        
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">⚡</div>
+                                <div class="feature-title">极速搜索</div>
+                                <div class="feature-desc">集成多个优质搜索引擎，快速找到所需资源</div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">🎯</div>
+                                <div class="feature-title">精准匹配</div>
+                                <div class="feature-desc">智能算法优化，提供最相关的搜索结果</div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">🛡️</div>
+                                <div class="feature-title">安全可靠</div>
+                                <div class="feature-desc">严格筛选优质资源，确保搜索安全</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loading" id="loading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div class="error-message" id="error-message">
+                    ❌ 加载错误，请刷新页面或选择其他搜索引擎
+                </div>
+
+                <iframe name="search" id="search-iframe" class="search-iframe" src="" allowfullscreen allowpaymentrequest="true"></iframe>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="https://lzpan.com" target="_blank">懒盘</a>
+                <a href="https://hunhepan.com" target="_blank" style="color: orange;">混合盘</a>
+                <a href="https://ujuji.com" target="_blank">优聚集</a>
+                <a href="https://mall.misiai.com" target="_blank">淘宝优惠券</a>
+                <a href="https://nav.ujuji.com" target="_blank">无道书签</a>
+                <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备19005797号-3</a>
+            </div>
+            <div class="footer-info">
+                <span>&copy;2019-<em id="year"></em> 资源搜(ziyuanso.net) - 专业的网盘资源搜索引擎导航</span><br>
+                <span>本站仅提供搜索导航服务，不存储任何资源文件</span>
+            </div>
+            <iframe src="https://ghbtns.com/github-btn.html?user=Xwudao&repo=lzpan_search&type=star&count=true" frameborder="0" scrolling="0" style="height: 20px; max-width: 108px; margin-top: 0.5rem;"></iframe>
+        </footer>
+    </div>
+
+    <script>
+        // 搜索引擎配置
+        const searchEngines = [
+            {
+                name: "盘古侠",
+                url: "https://www.panguxia.com",
+                icon: "https://i.olsh.me/icon?size=32&url=panguxia.com",
+                desc: "综合搜索引擎",
+                popular: true
+            },
+            {
+                name: "混合盘",
+                url: "https://hunhepan.com",
+                icon: "https://i.olsh.me/icon?size=32&url=hunhepan.com", 
+                desc: "多源聚合搜索",
+                popular: true
+            },
+            {
+                name: "夸夸搜",
+                url: "https://kuakua.app",
+                icon: "https://i.olsh.me/icon?size=32&url=kuakua.app",
+                desc: "资源丰富",
+                popular: false
+            },
+            {
+                name: "猫狸盘搜",
+                url: "https://www.maolicat.com",
+                icon: "https://i.olsh.me/icon?size=32&url=maolicat.com",
+                desc: "专业搜索",
+                popular: true
+            },
+            {
+                name: "UP云搜",
+                url: "https://www.upyunso.com",
+                icon: "https://i.olsh.me/icon?size=32&url=upyunso.com",
+                desc: "云端搜索",
+                popular: false
+            },
+            {
+                name: "易搜",
+                url: "https://yiso.fun",
+                icon: "https://i.olsh.me/icon?size=32&url=yiso.fun",
+                desc: "快速搜索",
+                popular: true
+            }
+        ];
+
+        let currentEngine = null;
+
+        // 渲染搜索引擎列表
+        function renderEngines() {
+            const enginesList = document.getElementById('engines-list');
+            const sortedEngines = [...searchEngines.filter(e => e.popular), ...searchEngines.filter(e => !e.popular)];
+            
+            enginesList.innerHTML = sortedEngines.map(engine => `
+                <li class="engine-item" onclick="selectEngine('${engine.url}', '${engine.name}')">
+                    <img src="${engine.icon}" alt="${engine.name}" class="engine-icon" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\"><rect width=\"32\" height=\"32\" fill=\"%23667eea\" rx=\"6\"/><text x=\"16\" y=\"20\" text-anchor=\"middle\" fill=\"white\" font-size=\"14\">🔍</text></svg>'">
+                    <div class="engine-info">
+                        <div class="engine-name">${engine.name}</div>
+                        <div class="engine-desc">${engine.desc}</div>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        // 选择搜索引擎
+        function selectEngine(url, name) {
+            // 移除之前的选中状态
+            document.querySelectorAll('.engine-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // 添加选中状态
+            event.currentTarget.classList.add('active');
+            currentEngine = { url, name };
+
+            // 显示加载状态
+            showLoading();
+
+            // 隐藏欢迎页面
+            document.getElementById('welcome-screen').style.display = 'none';
+
+            // 加载iframe
+            const iframe = document.getElementById('search-iframe');
+            iframe.src = url;
+            iframe.style.display = 'block';
+
+            // 监听iframe加载完成
+            iframe.onload = function() {
+                hideLoading();
+            };
+
+            // 设置加载超时
+            setTimeout(() => {
+                if (document.getElementById('loading').style.display !== 'none') {
+                    showError();
+                }
+            }, 10000);
+        }
+
+        // 执行搜索
+        function performSearch(query) {
+            if (!query.trim()) {
+                alert('请输入搜索关键词');
+                return;
+            }
+
+            if (!currentEngine) {
+                // 如果没有选择引擎，默认选择第一个
+                const firstEngine = searchEngines[0];
+                selectEngine(firstEngine.url, firstEngine.name);
+                // 等待iframe加载
+                setTimeout(() => {
+                    performSearch(query);
+                }, 1000);
+                return;
+            }
+
+            // 如果是直接搜索支持的网站，可以在这里添加特殊处理
+            // 这里保持原有的iframe方式
+            const iframe = document.getElementById('search-iframe');
+            if (iframe.contentWindow) {
+                try {
+                    // 尝试在iframe中执行搜索
+                    const searchInput = iframe.contentDocument.querySelector('input[type="text"], input[type="search"]');
+                    if (searchInput) {
+                        searchInput.value = query;
+                        searchInput.dispatchEvent(new Event('input'));
+                        
+                        const submitBtn = iframe.contentDocument.querySelector('button[type="submit"], input[type="submit"]');
+                        if (submitBtn) {
+                            submitBtn.click();
+                        }
+                    }
+                } catch (e) {
+                    console.log('跨域限制，无法直接操作iframe内容');
+                }
+            }
+        }
+
+        // 快速搜索
+        function quickSearch(keyword) {
+            document.getElementById('header-search-input').value = keyword;
+            performSearch(keyword);
+        }
+
+        // 显示加载状态
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+            document.getElementById('error-message').style.display = 'none';
+        }
+
+        // 隐藏加载状态
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // 显示错误信息
+        function showError() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error-message').style.display = 'block';
+        }
+
+        // 事件绑定
+        document.getElementById('header-search-btn').addEventListener('click', function() {
+            const query = document.getElementById('header-search-input').value;
+            performSearch(query);
+        });
+
+        document.getElementById('header-search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch(this.value);
+            }
+        });
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置年份
+            document.getElementById('year').textContent = new Date().getFullYear();
+            
+            // 渲染搜索引擎列表
+            renderEngines();
+            
+            // 默认选择第一个搜索引擎
+            // selectEngine(searchEngines[0].url, searchEngines[0].name);
+        });
+
+        // 错误处理
+        window.addEventListener('error', function(e) {
+            console.error('页面错误:', e);
+        });
+    </script>
+
+    <!-- 统计代码 -->
+    <script type="text/javascript" src="https://js.users.51.la/20403707.js"></script>
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>
+        LA.init({ id: "JMDv2UuvpJVq6AnI", ck: "JMDv2UuvpJVq6AnI" });
+    </script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-50DXKMPYGG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-50DXKMPYGG');
+    </script>
+</body>
 </html>
