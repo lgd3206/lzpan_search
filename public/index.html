@@ -583,9 +583,9 @@
         // 执行搜索（增强版）
         async function performSearch(query) {
             const searchQuery = query || document.getElementById('searchInput').value.trim();
-            if (!searchQuery) {
-                showMessage('请输入搜索关键词', 'warning');
-                return;
+    if (!searchQuery) {
+        alert('请输入搜索关键词');
+        return;
             }
 
             // 显示搜索状态
