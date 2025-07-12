@@ -1,1 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索结果 - 资源搜</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 顶部搜索栏 */
+        .header {
+            background: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4285f4;
+            text-decoration: none;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 600px;
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 24px;
+            border: 1px solid #dadce0;
+            overflow: hidden;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+            background: transparent;
+        }
+
+        .search-btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #3367d6;
+        }
+
+        /* 搜索信息栏 */
+        .search-info {
+            max-width: 1200px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .search-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .result-count {
+            color: #333;
+        }
+
+        .search-time {
+            color: #666;
+        }
+
+        /* 筛选器 */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-select {
+            padding: 0.3rem 0.8rem;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            background: white;
+            font-size: 0.85rem;
+        }
+
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.85rem;
+        }
+
+        /* 搜索结果列表 */
+        .results-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .result-item {
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .result-item:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .result-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .result-icon {
+            width: 40px;
+            height: 40px;
+            background: #4285f4;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .result-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .result-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1a73e8;
+            margin-bottom: 0.3rem;
+            line-height: 1.4;
+        }
+
+        .result-title:hover {
+            text-decoration: underline;
+        }
+
+        .result-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-files {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+        }
+
+        .file-preview {
+            background: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .result-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.8rem;
+        }
+
+        .tag {
+            background: #e8f0fe;
+            color: #1a73e8;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .result-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .result-source {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .source-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 2px;
+        }
+
+        .result-date {
+            color: #666;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.2rem 0.5rem;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            background: white;
+            color: #666;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .action-btn.report {
+            color: #ea4335;
+            border-color: #ea4335;
+        }
+
+        /* 侧边广告 */
+        .sidebar {
+            position: fixed;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 200px;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 50;
+        }
+
+        .ad-banner {
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #dadce0;
+            background: white;
+            color: #666;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .page-btn:hover {
+            background: #f8f9fa;
+        }
+
+        .page-btn.active {
+            background: #4285f4;
+            color: white;
+            border-color: #4285f4;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-bar {
+                max-width: 100%;
+            }
+
+            .search-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .filters {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .result-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .result-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部搜索栏 -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">资源搜</a>
+            <div class="search-bar">
+                <input type="text" class="search-input" id="searchInput" placeholder="搜索资源..." value="水浒无间道">
+                <button class="search-btn" onclick="performSearch()">搜索</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 搜索信息 -->
+    <div class="search-info">
+        <div class="search-meta">
+            <div class="result-count">
+                <strong>懒盘搜索</strong>为您提供关于<strong>水浒无间道</strong>搜索结果<strong>415</strong>条，耗时：<strong>90ms</strong>
+            </div>
+        </div>
+
+        <!-- 筛选器 -->
+        <div class="filters">
+            <div class="filter-group">
+                <select class="filter-select">
+                    <option>所有网盘</option>
+                    <option>百度网盘</option>
+                    <option>夸克网盘</option>
+                    <option>阿里云盘</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <select class="filter-select">
+                    <option>不限时间</option>
+                    <option>最近一天</option>
+                    <option>最近一周</option>
+                    <option>最近一月</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <select class="filter-select">
+                    <option>过滤类型</option>
+                    <option>视频</option>
+                    <option>音频</option>
+                    <option>文档</option>
+                    <option>软件</option>
+                </select>
+            </div>
+            <div class="filter-checkbox">
+                <input type="checkbox" id="preciseTEXT">
+                <label for="preciseTEXT">精确模式</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- 搜索结果 -->
+    <div class="results-container">
+        <!-- 结果项1 -->
+        <div class="result-item" onclick="openDetail('result1')">
+            <div class="result-header">
+                <div class="result-icon">🎬</div>
+                <div class="result-content">
+                    <div class="result-title">水浒无间道【2004 电视剧】</div>
+                    <div class="result-description">
+                        1d-vb.rmvb<br>
+                        file:水浒无间道[国语23].d-vb.rmvb<br>
+                        file:水浒无间道[国语02].d-vb.rmvb...
+                    </div>
+                    <div class="result-tags">
+                        <span class="tag">影视</span>
+                        <span class="tag">电视剧</span>
+                        <span class="tag">水浒</span>
+                        <span class="tag">国语</span>
+                    </div>
+                </div>
+            </div>
+            <div class="result-meta">
+                <div class="result-source">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFYSURBVDiNpZM9SwNBEIafgxCwsLGwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQ" class="source-icon" alt="夸克网盘">
+                    <span>夸克网盘</span>
+                </div>
+                <div class="result-date">2025-03-12</div>
+                <div class="result-actions">
+                    <button class="action-btn" onclick="event.stopPropagation(); shareResult(this)">关注公众</button>
+                    <button class="action-btn report" onclick="event.stopPropagation(); reportResult(this)">举报</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果项2 -->
+        <div class="result-item" onclick="openDetail('result2')">
+            <div class="result-header">
+                <div class="result-icon">🎬</div>
+                <div class="result-content">
+                    <div class="result-title">水浒无间道【2004 电视剧】</div>
+                    <div class="result-description">
+                        水浒无间道[国语21].d-vb.rmvb<br>
+                        file:水浒无间道[国语20].d-vb.rmvb<br>
+                        file:水浒无间道[国语19].d-vb.rmvb...
+                    </div>
+                    <div class="result-tags">
+                        <span class="tag">影视</span>
+                        <span class="tag">电视剧</span>
+                        <span class="tag">水浒传</span>
+                        <span class="tag">视频</span>
+                        <span class="tag">图片</span>
+                        <span class="tag">Excel</span>
+                        <span class="tag">办公</span>
+                    </div>
+                </div>
+            </div>
+            <div class="result-meta">
+                <div class="result-source">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFYSURBVDiNpZM9SwNBEIafgxCwsLGwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQ" class="source-icon" alt="夸克网盘">
+                    <span>夸克网盘</span>
+                </div>
+                <div class="result-date">2024-11-09</div>
+                <div class="result-actions">
+                    <button class="action-btn" onclick="event.stopPropagation(); shareResult(this)">关注公众</button>
+                    <button class="action-btn report" onclick="event.stopPropagation(); reportResult(this)">举报</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果项3 -->
+        <div class="result-item" onclick="openDetail('result3')">
+            <div class="result-header">
+                <div class="result-icon">🎥</div>
+                <div class="result-content">
+                    <div class="result-title">无间道风云 (2006)</div>
+                    <div class="result-description">
+                        高清重制版本，包含花絮和幕后制作特辑<br>
+                        file:无间道风云[1080p].mp4<br>
+                        file:幕后花絮.mp4...
+                    </div>
+                    <div class="result-tags">
+                        <span class="tag">电影</span>
+                        <span class="tag">高清</span>
+                        <span class="tag">1080p</span>
+                        <span class="tag">花絮</span>
+                    </div>
+                </div>
+            </div>
+            <div class="result-meta">
+                <div class="result-source">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFYSURBVDiNpZM9SwNBEIafgxCwsLGwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQ" class="source-icon" alt="百度网盘">
+                    <span>百度网盘</span>
+                </div>
+                <div class="result-date">2024-08-15</div>
+                <div class="result-actions">
+                    <button class="action-btn" onclick="event.stopPropagation(); shareResult(this)">关注公众</button>
+                    <button class="action-btn report" onclick="event.stopPropagation(); reportResult(this)">举报</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 更多结果项... -->
+        <div class="result-item" onclick="openDetail('result4')">
+            <div class="result-header">
+                <div class="result-icon">📁</div>
+                <div class="result-content">
+                    <div class="result-title">水浒传完整版合集【经典版本】</div>
+                    <div class="result-description">
+                        包含多个版本的水浒传影视资源<br>
+                        folder:水浒传1998版/<br>
+                        folder:水浒传2011版/<br>
+                        folder:相关电影合集/
+                    </div>
+                    <div class="result-tags">
+                        <span class="tag">合集</span>
+                        <span class="tag">经典</span>
+                        <span class="tag">多版本</span>
+                    </div>
+                </div>
+            </div>
+            <div class="result-meta">
+                <div class="result-source">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFYSURBVDiNpZM9SwNBEIafgxCwsLGwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQ" class="source-icon" alt="阿里云盘">
+                    <span>阿里云盘</span>
+                </div>
+                <div class="result-date">2024-06-20</div>
+                <div class="result-actions">
+                    <button class="action-btn" onclick="event.stopPropagation(); shareResult(this)">关注公众</button>
+                    <button class="action-btn report" onclick="event.stopPropagation(); reportResult(this)">举报</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 侧边广告 -->
+    <div class="sidebar">
+        <div class="ad-banner">
+            <div style="background: #f0f8ff; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                <div style="font-weight: bold; color: #1e90ff;">VIP特权</div>
+                <div style="font-size: 0.7rem; margin: 0.5rem 0;">无限制高速下载</div>
+                <button style="background: #1e90ff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; width: 100%; cursor: pointer;">立即开通</button>
+            </div>
+            <div style="font-size: 0.7rem; color: #999;">广告</div>
+        </div>
+    </div>
+
+    <!-- 分页 -->
+    <div class="pagination">
+        <a href="#" class="page-btn">上一页</a>
+        <a href="#" class="page-btn active">1</a>
+        <a href="#" class="page-btn">2</a>
+        <a href="#" class="page-btn">3</a>
+        <a href="#" class="page-btn">4</a>
+        <a href="#" class="page-btn">5</a>
+        <a href="#" class="page-btn">下一页</a>
+    </div>
+
+    <script>
+        // 模拟搜索数据
+        const searchResults = {
+            result1: {
+                title: "水浒无间道【2004 电视剧】",
+                files: [
+                    { name: "水浒无间道[国语01].rmvb", size: "425MB" },
+                    { name: "水浒无间道[国语02].rmvb", size: "428MB" },
+                    { name: "水浒无间道[国语03].rmvb", size: "430MB" },
+                    { name: "水浒无间道[国语04].rmvb", size: "432MB" },
+                    { name: "水浒无间道[国语05].rmvb", size: "429MB" }
+                ],
+                shareUrl: "https://pan.quark.cn/s/abc123def456",
+                extractCode: "1234",
+                source: "夸克网盘"
+            },
+            result2: {
+                title: "水浒无间道【2004 电视剧】完整版",
+                files: [
+                    { name: "水浒无间道[国语21].rmvb", size: "445MB" },
+                    { name: "水浒无间道[国语22].rmvb", size: "440MB" },
+                    { name: "水浒无间道[国语23].rmvb", size: "438MB" },
+                    { name: "水浒无间道[国语24].rmvb", size: "442MB" }
+                ],
+                shareUrl: "https://pan.quark.cn/s/def456ghi789",
+                extractCode: "5678",
+                source: "夸克网盘"
+            }
+        };
+
+        // 打开详情页面
+        function openDetail(resultId) {
+            const result = searchResults[resultId];
+            if (result) {
+                // 构建详情页URL
+                const detailUrl = `/detail.html?id=${resultId}&title=${encodeURIComponent(result.title)}`;
+                window.open(detailUrl, '_blank');
+            }
+        }
+
+        // 执行搜索
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                // 重新加载页面或更新搜索结果
+                window.location.href = `/search?q=${encodeURIComponent(query)}`;
+            }
+        }
+
+        // 分享结果
+        function shareResult(btn) {
+            alert('关注公众号获取更多资源！');
+        }
+
+        // 举报结果
+        function reportResult(btn) {
+            if (confirm('确定要举报这个资源吗？')) {
+                alert('举报已提交，感谢您的反馈！');
+            }
+        }
+
+        // 搜索框回车事件
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // 页面加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('搜索结果页面加载完成');
+        });
+    </script>
+</body>
+</html>
