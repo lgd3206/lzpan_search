@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>资源搜 - 网盘资源搜索引擎 | ziyuanso.net</title>
-    <meta name="keywords" content="网盘搜索,资源搜索,百度云盘,夸克网盘,迅雷云盘,阿里云盘,网盘资源,电影资源,软件下载">
-    <meta name="description" content="资源搜(ziyuanso.net) - 专业的网盘资源搜索引擎，集成多个优质搜索平台，一站式搜索全网网盘资源。">
+    <title>资源搜 - 专业的网盘资源搜索引擎</title>
+    <meta name="keywords" content="网盘搜索,资源搜索,百度云盘,夸克网盘,阿里云盘,电影下载,软件下载">
+    <meta name="description" content="资源搜(ziyuanso.net) - 专业的网盘资源搜索引擎，快速搜索全网网盘资源">
     
     <style>
         * {
@@ -16,68 +16,69 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #333;
-            line-height: 1.6;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
             padding: 2rem;
         }
 
-        /* Logo区域 */
         .logo-section {
-            text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
 
         .logo {
-            font-size: 3.5rem;
-            font-weight: 300;
-            color: #4285f4;
-            margin-bottom: 0.5rem;
-            letter-spacing: -2px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
-        .subtitle {
-            color: #666;
-            font-size: 1rem;
+        .site-title {
+            font-size: 3rem;
+            font-weight: 300;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .site-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
             margin-bottom: 2rem;
         }
 
-        /* 搜索区域 */
         .search-section {
-            width: 100%;
-            max-width: 600px;
             margin-bottom: 2rem;
         }
 
         .search-container {
-            position: relative;
             background: white;
-            border-radius: 24px;
-            box-shadow: 0 2px 5px 1px rgba(64,60,67,.16);
-            border: 1px solid #dadce0;
+            border-radius: 50px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
             display: flex;
-            align-items: center;
-            padding: 0.5rem;
-            transition: box-shadow 0.3s ease;
-        }
-
-        .search-container:hover {
-            box-shadow: 0 2px 8px 1px rgba(64,60,67,.24);
+            overflow: hidden;
+            transition: transform 0.3s ease;
         }
 
         .search-container:focus-within {
-            box-shadow: 0 2px 8px 1px rgba(64,60,67,.24);
-            border-color: #4285f4;
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
         }
 
         .search-input {
@@ -85,7 +86,7 @@
             border: none;
             outline: none;
             font-size: 1.1rem;
-            padding: 0.8rem 1rem;
+            padding: 1rem 1.5rem;
             background: transparent;
         }
 
@@ -93,21 +94,19 @@
             background: #4285f4;
             color: white;
             border: none;
-            border-radius: 20px;
-            padding: 0.8rem 2rem;
+            padding: 1rem 2rem;
             font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
             transition: background 0.3s ease;
-            font-weight: 500;
         }
 
         .search-btn:hover {
             background: #3367d6;
         }
 
-        /* 永久地址提示 */
         .permanent-notice {
-            color: #ea4335;
+            color: rgba(255, 255, 255, 0.9);
             font-size: 0.9rem;
             margin-bottom: 1.5rem;
             font-weight: 500;
@@ -117,148 +116,59 @@
             content: "🔥 ";
         }
 
-        /* 分类标签 */
-        .categories {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
+        .hot-searches {
             margin-bottom: 3rem;
         }
 
-        .category-item {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            background: white;
-            color: #666;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: 1px solid #dadce0;
-            font-size: 0.9rem;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .category-item:hover,
-        .category-item.active {
-            background: #4285f4;
-            color: white;
-            border-color: #4285f4;
-        }
-
-        .category-item.hot::before {
-            content: "🔥 ";
-        }
-
-        .category-item.active::after {
-            content: "";
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-bottom: 6px solid #4285f4;
-        }
-
-        /* 热门搜索列表 */
-        .hot-searches {
-            width: 100%;
-            max-width: 800px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px 1px rgba(64,60,67,.16);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
         .hot-title {
+            color: white;
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 1rem;
-            color: #333;
         }
 
-        .hot-list {
+        .hot-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 0.5rem;
+            max-width: 400px;
+            margin: 0 auto;
         }
 
         .hot-item {
-            display: flex;
-            align-items: center;
-            padding: 0.5rem;
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.8rem;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s ease;
-            text-decoration: none;
-            color: inherit;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
         }
 
         .hot-item:hover {
-            background: #f8f9fa;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
-        .hot-number {
-            width: 24px;
-            height: 24px;
-            border-radius: 2px;
-            background: #f0f0f0;
-            color: #666;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-right: 0.8rem;
-            min-width: 24px;
-        }
-
-        .hot-item:nth-child(-n+3) .hot-number {
-            background: #ea4335;
-            color: white;
-        }
-
-        .hot-text {
-            flex: 1;
-            font-size: 0.9rem;
-            color: #333;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* 底部链接 */
         .footer-links {
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
             gap: 1.5rem;
+            flex-wrap: wrap;
             margin-top: 2rem;
         }
 
         .footer-links a {
-            color: #4285f4;
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             font-size: 0.9rem;
             transition: color 0.3s ease;
         }
 
         .footer-links a:hover {
-            color: #3367d6;
-            text-decoration: underline;
-        }
-
-        /* 版权信息 */
-        .copyright {
-            text-align: center;
-            color: #666;
-            font-size: 0.8rem;
-            margin-top: 1rem;
-            line-height: 1.5;
+            color: white;
         }
 
         /* 响应式设计 */
@@ -267,100 +177,18 @@
                 padding: 1rem;
             }
 
-            .logo {
+            .site-title {
                 font-size: 2.5rem;
             }
 
-            .categories {
-                gap: 0.3rem;
-            }
-
-            .category-item {
-                font-size: 0.8rem;
-                padding: 0.4rem 0.8rem;
-            }
-
-            .hot-list {
+            .hot-grid {
                 grid-template-columns: 1fr;
+                max-width: 300px;
             }
 
             .footer-links {
                 gap: 1rem;
             }
-
-            .search-section {
-                max-width: 100%;
-            }
-            
-            .engine-status {
-                display: none !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .search-container {
-                flex-direction: column;
-                gap: 0.5rem;
-                padding: 1rem;
-            }
-
-            .search-input {
-                width: 100%;
-                text-align: center;
-            }
-
-            .search-btn {
-                width: 100%;
-                padding: 1rem;
-            }
-            
-            .search-message {
-                top: 10px !important;
-                right: 10px !important;
-                left: 10px !important;
-                max-width: none !important;
-            }
-        }
-
-        /* 消息动画 */
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-
-        /* 搜索引擎状态样式 */
-        .engine-status {
-            transition: all 0.3s ease;
-        }
-
-        .engine-status:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        /* 加载动画 */
-        .loading {
-            display: none;
-            justify-content: center;
-            align-items: center;
-            margin: 1rem 0;
-        }
-
-        .loading-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #4285f4;
-            margin: 0 2px;
-            animation: loading 1.4s ease-in-out infinite both;
-        }
-
-        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
-        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes loading {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
         }
     </style>
 </head>
@@ -369,646 +197,74 @@
     <div class="container">
         <!-- Logo区域 -->
         <div class="logo-section">
-            <h1 class="logo">资源搜</h1>
-            <p class="subtitle">专业的网盘资源搜索引擎</p>
+            <div class="logo">🔍</div>
+            <h1 class="site-title">资源搜</h1>
+            <p class="site-subtitle">专业的网盘资源搜索引擎</p>
         </div>
-
-        <!-- 搜索引擎状态指示器（优化版） -->
-        <div class="engine-status" style="
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            font-size: 0.8rem;
-            max-width: 220px;
-            z-index: 100;
-            border-left: 4px solid #4285f4;
-        ">
-            <div style="
-                font-weight: 600; 
-                margin-bottom: 0.8rem;
-                color: #333;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            ">
-                <span style="
-                    width: 8px;
-                    height: 8px;
-                    background: #4285f4;
-                    border-radius: 50%;
-                    animation: pulse 2s infinite;
-                "></span>
-                搜索引擎状态
-            </div>
-            <div id="engine-status-list">
-                <!-- 状态列表将动态生成 -->
-            </div>
-            <div style="
-                margin-top: 0.8rem;
-                padding-top: 0.8rem;
-                border-top: 1px solid #f0f0f0;
-                font-size: 0.7rem;
-                color: #666;
-                text-align: center;
-            ">
-                实时监控 · 智能切换
-            </div>
-        </div>
-
-        <style>
-            @keyframes pulse {
-                0% { opacity: 1; }
-                50% { opacity: 0.5; }
-                100% { opacity: 1; }
-            }
-        </style>
 
         <!-- 搜索区域 -->
         <div class="search-section">
             <div class="search-container">
-                <input type="text" class="search-input" placeholder="请输入搜索关键词" id="searchInput" autocomplete="off">
+                <input type="text" class="search-input" id="searchInput" placeholder="输入电影、电视剧、综艺、动漫、软件、资源名..." autofocus>
                 <button class="search-btn" onclick="performSearch()">搜索</button>
             </div>
             
             <div class="permanent-notice">永久地址，请收藏</div>
-            
-            <!-- 分类标签 -->
-            <div class="categories">
-                <a href="#" class="category-item hot active" data-category="hot">热搜</a>
-                <a href="#" class="category-item" data-category="movie">电影</a>
-                <a href="#" class="category-item" data-category="tv">电视剧</a>
-                <a href="#" class="category-item" data-category="novel">小说</a>
-                <a href="#" class="category-item" data-category="variety">综艺</a>
-                <a href="#" class="category-item" data-category="game">游戏</a>
-                <a href="#" class="category-item" data-category="anime">动漫</a>
-            </div>
         </div>
 
         <!-- 热门搜索 -->
         <div class="hot-searches">
-            <h3 class="hot-title">热门搜索</h3>
-            <div class="hot-list" id="hotList">
-                <!-- 热门搜索列表将在这里动态生成 -->
+            <div class="hot-title">🔥 热门搜索</div>
+            <div class="hot-grid">
+                <div class="hot-item" onclick="quickSearch('以法之名')">1. 以法之名</div>
+                <div class="hot-item" onclick="quickSearch('书卷一梦')">2. 书卷一梦</div>
+                <div class="hot-item" onclick="quickSearch('锦绣芳华')">3. 锦绣芳华</div>
+                <div class="hot-item" onclick="quickSearch('逆爱')">4. 逆爱</div>
+                <div class="hot-item" onclick="quickSearch('正当防卫')">5. 正当防卫</div>
+                <div class="hot-item" onclick="quickSearch('长安的荔枝')">6. 长安的荔枝</div>
+                <div class="hot-item" onclick="quickSearch('桃花映江山')">7. 桃花映江山</div>
+                <div class="hot-item" onclick="quickSearch('仙逆')">8. 仙逆</div>
             </div>
-        </div>
-
-        <!-- 加载动画 -->
-        <div class="loading" id="loading">
-            <div class="loading-dot"></div>
-            <div class="loading-dot"></div>
-            <div class="loading-dot"></div>
         </div>
 
         <!-- 底部链接 -->
         <div class="footer-links">
-            <a href="#" target="_blank">百度云盘搜索</a>
-            <a href="#" target="_blank">夸克网盘搜索</a>
-            <a href="#" target="_blank">迅雷云盘搜索</a>
-            <a href="#" target="_blank">资源论坛</a>
-            <a href="#" target="_blank">资源提交</a>
-            <a href="#" target="_blank">软件资源</a>
-            <a href="#" target="_blank">意见反馈</a>
-            <a href="#" target="_blank">商务合作</a>
-        </div>
-
-        <!-- 版权信息 -->
-        <div class="copyright">
-            <p>&copy;2019-<span id="year"></span> 资源搜(ziyuanso.net) - 专业的网盘资源搜索引擎</p>
-            <p>本站仅提供搜索服务，不存储任何资源文件</p>
+            <a href="#" target="_blank">百度网盘</a>
+            <a href="#" target="_blank">夸克网盘</a>
+            <a href="#" target="_blank">阿里云盘</a>
+            <a href="#" target="_blank">迅雷云盘</a>
         </div>
     </div>
 
     <script>
-        // 热门搜索数据
-        const hotSearches = [
-            "以法之名", "书卷一梦", "哪吒之魔童闹海", "灵笼",
-            "正当防卫", "锦绣芳华", "桃花映江山", "蝶中谍8",
-            "朱雀堂", "哪吒2", "浮火年代", "封神第二部",
-            "灵笼第三季", "逆爱"
-        ];
-
-        // 搜索引擎配置（修正版 - 改为内置搜索）
-        const searchEngines = [
-            {
-                name: "猫狸盘搜",
-                url: "https://www.maolicat.com",
-                searchUrl: "https://www.maolicat.com/search?keyword=",
-                status: "active",
-                internal: false
-            },
-            {
-                name: "易搜",
-                url: "https://yiso.fun", 
-                searchUrl: "https://yiso.fun/search?keyword=",
-                status: "backup",
-                internal: false
-            },
-            {
-                name: "内置搜索",
-                url: "/search.html",
-                searchUrl: "/search.html?q=",
-                status: "active",
-                internal: true
-            },
-            {
-                name: "混合盘",
-                url: "https://hunhepan.com",
-                searchUrl: "https://hunhepan.com/search?keyword=",
-                status: "backup",
-                internal: false
-            },
-            {
-                name: "夸夸搜",
-                url: "https://kuakua.app",
-                searchUrl: "https://kuakua.app/search?keyword=",
-                status: "maintenance",
-                internal: false
-            },
-            {
-                name: "UP云搜",
-                url: "https://www.upyunso.com",
-                searchUrl: "https://www.upyunso.com/search?keyword=",
-                status: "maintenance",
-                internal: false
-            }
-        ];
-
-        let currentCategory = 'hot';
-        let currentEngine = searchEngines[0];
-
-        // 渲染热门搜索列表
-        function renderHotSearches() {
-            const hotList = document.getElementById('hotList');
-            hotList.innerHTML = hotSearches.map((item, index) => 
-                `<a href="#" class="hot-item" onclick="quickSearch('${item}')">
-                    <span class="hot-number">${index + 1}</span>
-                    <span class="hot-text">${item}</span>
-                </a>`
-            ).join('');
-        }
-
-        // 设置分类
-        function setCategory(category) {
-            document.querySelectorAll('.category-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            currentCategory = category;
-            
-            // 这里可以根据分类更新热门搜索列表
-            updateHotSearchesByCategory(category);
-        }
-
-        // 根据分类更新热门搜索
-        function updateHotSearchesByCategory(category) {
-            const categoryData = {
-                hot: ["以法之名", "书卷一梦", "哪吒之魔童闹海", "灵笼", "正当防卫", "锦绣芳华", "桃花映江山", "蝶中谍8", "朱雀堂", "哪吒2", "浮火年代", "封神第二部", "灵笼第三季", "逆爱"],
-                movie: ["阿凡达3", "速度与激情11", "变形金刚8", "复仇者联盟5", "蜘蛛侠4", "钢铁侠4", "黑寡妇2", "雷神5"],
-                tv: ["狂飙", "三体", "繁花", "庆余年3", "琅琊榜3", "长月烬明", "苍兰诀", "星汉灿烂"],
-                novel: ["斗罗大陆", "完美世界", "遮天", "凡人修仙传", "诛仙", "盗墓笔记", "鬼吹灯", "三体"],
-                variety: ["奔跑吧", "极限挑战", "快乐大本营", "天天向上", "中国好声音", "我是歌手", "明星大侦探", "向往的生活"],
-                game: ["王者荣耀", "英雄联盟", "绝地求生", "原神", "我的世界", "GTA5", "赛博朋克2077", "艾尔登法环"],
-                anime: ["鬼灭之刃", "进击的巨人", "一拳超人", "火影忍者", "海贼王", "龙珠", "名侦探柯南", "妖精的尾巴"]
-            };
-
-            const data = categoryData[category] || categoryData.hot;
-            const hotList = document.getElementById('hotList');
-            hotList.innerHTML = data.map((item, index) => 
-                `<a href="#" class="hot-item" onclick="quickSearch('${item}')">
-                    <span class="hot-number">${index + 1}</span>
-                    <span class="hot-text">${item}</span>
-                </a>`
-            ).join('');
-        }
-
-        // 智能搜索引擎选择
-        function getAvailableEngine() {
-            // 优先选择状态为active的引擎
-            const activeEngines = searchEngines.filter(engine => engine.status === 'active');
-            if (activeEngines.length > 0) {
-                return activeEngines[Math.floor(Math.random() * activeEngines.length)];
-            }
-            
-            // 如果没有active引擎，选择backup引擎
-            const backupEngines = searchEngines.filter(engine => engine.status === 'backup');
-            if (backupEngines.length > 0) {
-                return backupEngines[0];
-            }
-            
-            // 最后选择任意可用引擎
-            return searchEngines[0];
-        }
-
-        // 检测搜索引擎状态
-        async function checkEngineStatus(engine) {
-            try {
-                // 使用图片预加载方式检测网站可用性
-                return new Promise((resolve) => {
-                    const img = new Image();
-                    img.onload = () => resolve(true);
-                    img.onerror = () => resolve(false);
-                    img.src = engine.url + '/favicon.ico?' + Date.now();
-                    
-                    // 3秒超时
-                    setTimeout(() => resolve(false), 3000);
-                });
-            } catch (error) {
-                return false;
-            }
-        }
-
-        // 执行搜索（增强版）
-        async function performSearch(query) {
-            const searchQuery = query || document.getElementById('searchInput').value.trim();
-            if (!searchQuery) {
-                showMessage('请输入搜索关键词', 'warning');
+        // 执行搜索
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                alert('请输入搜索关键词');
                 return;
             }
-
-            // 显示搜索状态
-            showMessage('正在为您搜索...', 'info');
-            showLoading();
-
-            try {
-                // 智能选择搜索引擎
-                let selectedEngine = getAvailableEngine();
-                
-                // 检测搜索引擎可用性
-                const isAvailable = await checkEngineStatus(selectedEngine);
-                
-                if (!isAvailable && searchAttempts < maxSearchAttempts) {
-                    searchAttempts++;
-                    showMessage(`${selectedEngine.name} 暂时不可用，正在切换到备用搜索引擎...`, 'warning');
-                    
-                    // 尝试其他搜索引擎
-                    const otherEngines = searchEngines.filter(e => e.name !== selectedEngine.name && e.status !== 'maintenance');
-                    if (otherEngines.length > 0) {
-                        selectedEngine = otherEngines[0];
-                    }
-                }
-
-                // 构建搜索URL
-                const searchUrl = selectedEngine.searchUrl + encodeURIComponent(searchQuery);
-                
-                // 显示成功消息
-                showMessage(`使用 ${selectedEngine.name} 为您搜索"${searchQuery}"`, 'success');
-                
-                // 在新标签页打开搜索结果
-                window.open(searchUrl, '_blank');
-                
-                // 添加到搜索历史
-                addToSearchHistory(searchQuery);
-                
-                // 重置搜索尝试次数
-                searchAttempts = 0;
-                
-            } catch (error) {
-                console.error('搜索错误:', error);
-                showMessage('搜索服务暂时不可用，请稍后重试', 'error');
-                
-                // 备用搜索方案 - 直接百度搜索
-                showBackupSearch(searchQuery);
-            } finally {
-                hideLoading();
-            }
-        }
-
-        // 备用搜索方案（优化版）
-        function showBackupSearch(query) {
-            const backupSearches = [
-                { 
-                    name: '百度搜索', 
-                    url: `https://www.baidu.com/s?wd=${encodeURIComponent(query + ' 网盘 资源')}`,
-                    icon: '🔍',
-                    color: '#4285f4'
-                },
-                { 
-                    name: '必应搜索', 
-                    url: `https://www.bing.com/search?q=${encodeURIComponent(query + ' 网盘 下载')}`,
-                    icon: '🌐', 
-                    color: '#0078d4'
-                },
-                { 
-                    name: 'Google搜索', 
-                    url: `https://www.google.com/search?q=${encodeURIComponent(query + ' 网盘 分享')}`,
-                    icon: '🔎',
-                    color: '#34a853'
-                }
-            ];
             
-            const backupHtml = `
-                <div class="backup-search-overlay" style="
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0,0,0,0.6);
-                    z-index: 9999;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    animation: fadeIn 0.3s ease;
-                " onclick="closeBackupSearch()">
-                    <div class="backup-search-modal" style="
-                        background: white;
-                        padding: 2rem;
-                        border-radius: 16px;
-                        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-                        max-width: 480px;
-                        width: 90%;
-                        text-align: center;
-                        animation: slideUp 0.3s ease;
-                        position: relative;
-                    " onclick="event.stopPropagation()">
-                        <div style="
-                            width: 60px;
-                            height: 60px;
-                            background: linear-gradient(135deg, #ff6b35, #f7931e);
-                            border-radius: 50%;
-                            margin: 0 auto 1.5rem;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-size: 1.5rem;
-                        ">⚠️</div>
-                        
-                        <h3 style="
-                            margin-bottom: 1rem; 
-                            color: #333;
-                            font-size: 1.3rem;
-                            font-weight: 600;
-                        ">专业搜索引擎暂时不可用</h3>
-                        
-                        <p style="
-                            margin-bottom: 2rem; 
-                            color: #666;
-                            line-height: 1.6;
-                            font-size: 0.95rem;
-                        ">为您提供备用搜索方案：</p>
-                        
-                        <div style="
-                            display: flex; 
-                            gap: 0.8rem; 
-                            flex-wrap: wrap; 
-                            justify-content: center;
-                            margin-bottom: 2rem;
-                        ">
-                            ${backupSearches.map(search => `
-                                <a href="${search.url}" target="_blank" style="
-                                    background: ${search.color};
-                                    color: white;
-                                    padding: 0.8rem 1.5rem;
-                                    border-radius: 8px;
-                                    text-decoration: none;
-                                    font-size: 0.9rem;
-                                    font-weight: 500;
-                                    display: flex;
-                                    align-items: center;
-                                    gap: 0.5rem;
-                                    transition: all 0.3s ease;
-                                    flex: 1;
-                                    min-width: 120px;
-                                    justify-content: center;
-                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.2)'" 
-                                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                                    <span>${search.icon}</span>
-                                    <span>${search.name}</span>
-                                </a>
-                            `).join('')}
-                        </div>
-                        
-                        <div style="
-                            background: #f8f9fa;
-                            padding: 1rem;
-                            border-radius: 8px;
-                            margin-bottom: 1.5rem;
-                            border-left: 4px solid #4285f4;
-                        ">
-                            <div style="
-                                font-size: 0.85rem;
-                                color: #666;
-                                text-align: left;
-                            ">
-                                💡 <strong>搜索技巧：</strong><br>
-                                • 关键词 + "网盘" + "分享"<br>
-                                • 添加文件格式：如 "mp4" "pdf"<br>
-                                • 使用引号精确搜索："${query}"
-                            </div>
-                        </div>
-                        
-                        <button onclick="closeBackupSearch()" style="
-                            background: #f8f9fa;
-                            border: 1px solid #dadce0;
-                            color: #666;
-                            padding: 0.8rem 2rem;
-                            border-radius: 8px;
-                            cursor: pointer;
-                            font-size: 0.9rem;
-                            transition: all 0.3s ease;
-                            width: 100%;
-                        " onmouseover="this.style.background='#e8f0fe'; this.style.color='#4285f4'" 
-                           onmouseout="this.style.background='#f8f9fa'; this.style.color='#666'">
-                            关闭
-                        </button>
-                        
-                        <button onclick="closeBackupSearch()" style="
-                            position: absolute;
-                            top: 1rem;
-                            right: 1rem;
-                            background: none;
-                            border: none;
-                            font-size: 1.5rem;
-                            cursor: pointer;
-                            color: #999;
-                            width: 32px;
-                            height: 32px;
-                            border-radius: 50%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                        " onmouseover="this.style.background='#f0f0f0'" 
-                           onmouseout="this.style.background='none'">×</button>
-                    </div>
-                </div>
-                
-                <style>
-                    @keyframes fadeIn {
-                        from { opacity: 0; }
-                        to { opacity: 1; }
-                    }
-                    @keyframes slideUp {
-                        from { transform: translateY(30px); opacity: 0; }
-                        to { transform: translateY(0); opacity: 1; }
-                    }
-                </style>
-            `;
-            
-            document.body.insertAdjacentHTML('beforeend', backupHtml);
-            
-            // 记录备用搜索使用情况
-            console.log(`备用搜索触发: ${query}`);
-        }
-
-        // 关闭备用搜索弹窗（优化版）
-        window.closeBackupSearch = function() {
-            const overlay = document.querySelector('.backup-search-overlay');
-            if (overlay) {
-                overlay.style.animation = 'fadeOut 0.3s ease';
-                setTimeout(() => {
-                    if (overlay.parentNode) {
-                        overlay.remove();
-                    }
-                }, 300);
-            }
-        }
-
-        // 添加淡出动画样式
-        const fadeOutStyle = document.createElement('style');
-        fadeOutStyle.textContent = `
-            @keyframes fadeOut {
-                from { opacity: 1; }
-                to { opacity: 0; }
-            }
-        `;
-        document.head.appendChild(fadeOutStyle);
-
-        // 显示消息提示
-        function showMessage(message, type = 'info') {
-            // 移除现有消息
-            const existingMsg = document.querySelector('.search-message');
-            if (existingMsg) existingMsg.remove();
-            
-            const colors = {
-                success: '#4caf50',
-                warning: '#ff9800', 
-                error: '#f44336',
-                info: '#2196f3'
-            };
-            
-            const messageHtml = `
-                <div class="search-message" style="
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: ${colors[type]};
-                    color: white;
-                    padding: 1rem 1.5rem;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-                    z-index: 1000;
-                    max-width: 300px;
-                    font-size: 0.9rem;
-                    animation: slideIn 0.3s ease;
-                ">
-                    ${message}
-                </div>
-                <style>
-                    @keyframes slideIn {
-                        from { transform: translateX(100%); opacity: 0; }
-                        to { transform: translateX(0); opacity: 1; }
-                    }
-                </style>
-            `;
-            
-            document.body.insertAdjacentHTML('beforeend', messageHtml);
-            
-            // 3秒后自动消失
-            setTimeout(() => {
-                const msg = document.querySelector('.search-message');
-                if (msg) {
-                    msg.style.animation = 'slideOut 0.3s ease';
-                    setTimeout(() => msg.remove(), 300);
-                }
-            }, 3000);
+            // 直接跳转到搜索结果页面
+            window.location.href = `/search.html?q=${encodeURIComponent(query)}`;
         }
 
         // 快速搜索
         function quickSearch(keyword) {
-            document.getElementById('searchInput').value = keyword;
-            performSearch(keyword);
+            window.location.href = `/search.html?q=${encodeURIComponent(keyword)}`;
         }
 
-        // 显示加载动画
-        function showLoading() {
-            document.getElementById('loading').style.display = 'flex';
-        }
-
-        // 隐藏加载动画  
-        function hideLoading() {
-            setTimeout(() => {
-                document.getElementById('loading').style.display = 'none';
-            }, 1000);
-        }
-
-        // 添加到搜索历史
-        function addToSearchHistory(query) {
-            let history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
-            if (!history.includes(query)) {
-                history.unshift(query);
-                history = history.slice(0, 10); // 只保留最近10次搜索
-                localStorage.setItem('searchHistory', JSON.stringify(history));
-            }
-        }
-
-        // 获取搜索历史
-        function getSearchHistory() {
-            return JSON.parse(localStorage.getItem('searchHistory') || '[]');
-        }
-
-        // 事件绑定
+        // 回车搜索
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 performSearch();
             }
         });
 
-        // 分类点击事件
+        // 页面加载完成
         document.addEventListener('DOMContentLoaded', function() {
-            // 设置年份
-            document.getElementById('year').textContent = new Date().getFullYear();
-            
-            // 渲染热门搜索
-            renderHotSearches();
-
-            // 分类点击事件
-            document.querySelectorAll('.category-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    setCategory(this.dataset.category);
-                });
-            });
-
-            // 搜索框获得焦点时的效果
-            document.getElementById('searchInput').addEventListener('focus', function() {
-                this.parentElement.style.transform = 'scale(1.02)';
-            });
-
-            document.getElementById('searchInput').addEventListener('blur', function() {
-                this.parentElement.style.transform = 'scale(1)';
-            });
+            console.log('资源搜首页加载完成');
         });
-
-        // 页面性能监控
-        window.addEventListener('load', function() {
-            console.log('页面加载完成');
-        });
-    </script>
-
-    <!-- 统计代码 -->
-    <script>
-        // Google Analytics
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-        
-        ga('create', 'UA-XXXXXXXX-X', 'auto');
-        ga('send', 'pageview');
     </script>
 </body>
 </html>
