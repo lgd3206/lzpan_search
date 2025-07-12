@@ -573,6 +573,13 @@
                                 <div class="feature-desc">严格筛选优质资源，确保搜索安全</div>
                             </div>
                         </div>
+                        
+                        <div style="margin-top: 2rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.9rem;">
+                            <div style="margin-bottom: 0.5rem;">💡 <strong>使用说明：</strong></div>
+                            <div>• 直接在顶部搜索框输入关键词，系统会智能选择搜索引擎</div>
+                            <div>• 点击左侧搜索引擎名称，在新标签页打开对应网站</div>
+                            <div>• 点击热门搜索标签，快速搜索热门资源</div>
+                        </div>
                     </div>
                 </div>
 
@@ -663,15 +670,15 @@
             const enginesList = document.getElementById('engines-list');
             const sortedEngines = [...searchEngines.filter(e => e.popular), ...searchEngines.filter(e => !e.popular)];
             
-            enginesList.innerHTML = sortedEngines.map(engine => `
-                <li class="engine-item" onclick="selectEngine('${engine.url}', '${engine.name}')">
-                    <img src="${engine.icon}" alt="${engine.name}" class="engine-icon" onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\"><rect width=\"32\" height=\"32\" fill=\"%23667eea\" rx=\"6\"/><text x=\"16\" y=\"20\" text-anchor=\"middle\" fill=\"white\" font-size=\"14\">🔍</text></svg>'">
+            enginesList.innerHTML = sortedEngines.map(engine => 
+                `<li class="engine-item" onclick="selectEngine('${engine.url}', '${engine.name}')">
+                    <img src="${engine.icon}" alt="${engine.name}" class="engine-icon" onerror="this.src='data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 32 32&quot;><rect width=&quot;32&quot; height=&quot;32&quot; fill=&quot;%23667eea&quot; rx=&quot;6&quot;/><text x=&quot;16&quot; y=&quot;20&quot; text-anchor=&quot;middle&quot; fill=&quot;white&quot; font-size=&quot;14&quot;>🔍</text></svg>'">
                     <div class="engine-info">
                         <div class="engine-name">${engine.name}</div>
                         <div class="engine-desc">${engine.desc}</div>
                     </div>
-                </li>
-            `).join('');
+                </li>`
+            ).join('');
         }
 
         // 选择搜索引擎
@@ -683,30 +690,48 @@
 
             // 添加选中状态
             event.currentTarget.classList.add('active');
-            currentEngine = { url, name };
+            currentEngine = { url: url, name: name };
 
-            // 显示加载状态
-            showLoading();
+            // 检查是否支持iframe嵌入
+            const iframeFriendlyDomains = [
+                'misiyu.cn',
+                'ujuji.com',
+                'misiai.com'
+            ];
 
-            // 隐藏欢迎页面
-            document.getElementById('welcome-screen').style.display = 'none';
+            const domain = new URL(url).hostname;
+            const isIframeFriendly = iframeFriendlyDomains.some(d => domain.includes(d));
 
-            // 加载iframe
-            const iframe = document.getElementById('search-iframe');
-            iframe.src = url;
-            iframe.style.display = 'block';
+            if (isIframeFriendly) {
+                // 支持iframe的网站，在页面内加载
+                showLoading();
+                document.getElementById('welcome-screen').style.display = 'none';
+                
+                const iframe = document.getElementById('search-iframe');
+                iframe.src = url;
+                iframe.style.display = 'block';
 
-            // 监听iframe加载完成
-            iframe.onload = function() {
-                hideLoading();
-            };
+                iframe.onload = function() {
+                    hideLoading();
+                };
 
-            // 设置加载超时
-            setTimeout(() => {
-                if (document.getElementById('loading').style.display !== 'none') {
+                iframe.onerror = function() {
                     showError();
-                }
-            }, 10000);
+                };
+
+                setTimeout(() => {
+                    if (document.getElementById('loading').style.display !== 'none') {
+                        showError();
+                    }
+                }, 8000);
+            } else {
+                // 不支持iframe的网站，在新标签页打开
+                window.open(url, '_blank');
+                
+                // 重置选中状态，保持在欢迎页面
+                event.currentTarget.classList.remove('active');
+                currentEngine = null;
+            }
         }
 
         // 执行搜索
@@ -716,36 +741,22 @@
                 return;
             }
 
+            // 智能选择搜索引擎
             if (!currentEngine) {
-                // 如果没有选择引擎，默认选择第一个
-                const firstEngine = searchEngines[0];
-                selectEngine(firstEngine.url, firstEngine.name);
-                // 等待iframe加载
+                const defaultEngine = searchEngines.find(e => e.popular) || searchEngines[0];
+                
+                // 构建搜索URL
+                const searchUrl = defaultEngine.url + '/search?q=' + encodeURIComponent(query);
+                window.open(searchUrl, '_blank');
+                
+                // 提示用户
                 setTimeout(() => {
-                    performSearch(query);
-                }, 1000);
-                return;
-            }
-
-            // 如果是直接搜索支持的网站，可以在这里添加特殊处理
-            // 这里保持原有的iframe方式
-            const iframe = document.getElementById('search-iframe');
-            if (iframe.contentWindow) {
-                try {
-                    // 尝试在iframe中执行搜索
-                    const searchInput = iframe.contentDocument.querySelector('input[type="text"], input[type="search"]');
-                    if (searchInput) {
-                        searchInput.value = query;
-                        searchInput.dispatchEvent(new Event('input'));
-                        
-                        const submitBtn = iframe.contentDocument.querySelector('button[type="submit"], input[type="submit"]');
-                        if (submitBtn) {
-                            submitBtn.click();
-                        }
-                    }
-                } catch (e) {
-                    console.log('跨域限制，无法直接操作iframe内容');
-                }
+                    alert('已使用 ' + defaultEngine.name + ' 为您搜索 "' + query + '"\n\n💡 提示：您也可以先选择左侧的搜索引擎，然后再搜索');
+                }, 500);
+            } else {
+                // 如果已选择引擎，在对应引擎中搜索
+                const searchUrl = currentEngine.url + '/search?q=' + encodeURIComponent(query);
+                window.open(searchUrl, '_blank');
             }
         }
 
@@ -791,9 +802,6 @@
             
             // 渲染搜索引擎列表
             renderEngines();
-            
-            // 默认选择第一个搜索引擎
-            // selectEngine(searchEngines[0].url, searchEngines[0].name);
         });
 
         // 错误处理
