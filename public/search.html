@@ -76,102 +76,77 @@
             background: #3367d6;
         }
 
-        /* 搜索信息栏 */
-        .search-info {
+        /* 主要内容 */
+        .main-content {
             max-width: 1200px;
-            margin: 1rem auto;
-            padding: 0 1rem;
-            color: #666;
-            font-size: 0.9rem;
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
 
-        .search-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
+        .search-info {
+            margin-bottom: 2rem;
+            color: #666;
+            font-size: 0.9rem;
         }
 
         .result-count {
             color: #333;
         }
 
-        .search-time {
-            color: #666;
+        /* 搜索结果卡片 */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
         }
 
-        /* 筛选器 */
-        .filters {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .filter-select {
-            padding: 0.3rem 0.8rem;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
+        .result-card {
             background: white;
-            font-size: 0.85rem;
-        }
-
-        .filter-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-size: 0.85rem;
-        }
-
-        /* 搜索结果列表 */
-        .results-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .result-item {
-            background: white;
-            margin-bottom: 1rem;
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
-        .result-item:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, #4285f4, #34a853);
         }
 
         .result-header {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 1rem;
-            margin-bottom: 0.8rem;
+            margin-bottom: 1rem;
         }
 
         .result-icon {
-            width: 40px;
-            height: 40px;
-            background: #4285f4;
-            border-radius: 6px;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #4285f4, #34a853);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.2rem;
-            flex-shrink: 0;
+            font-size: 1.3rem;
         }
 
-        .result-content {
+        .result-info {
             flex: 1;
-            min-width: 0;
         }
 
         .result-title {
@@ -182,38 +157,26 @@
             line-height: 1.4;
         }
 
-        .result-title:hover {
-            text-decoration: underline;
+        .result-source {
+            font-size: 0.85rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .result-description {
             color: #666;
             font-size: 0.9rem;
             line-height: 1.5;
-            margin-bottom: 0.5rem;
-        }
-
-        .result-files {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 0.8rem;
-        }
-
-        .file-preview {
-            background: #f8f9fa;
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-family: monospace;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-bottom: 1rem;
         }
 
         .result-tags {
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
-            margin-bottom: 0.8rem;
+            margin-bottom: 1rem;
         }
 
         .tag {
@@ -224,7 +187,7 @@
             font-size: 0.8rem;
         }
 
-        .result-meta {
+        .result-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -232,103 +195,65 @@
             color: #666;
         }
 
-        .result-source {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .source-icon {
-            width: 16px;
-            height: 16px;
-            border-radius: 2px;
+        .result-size {
+            font-weight: 500;
         }
 
         .result-date {
-            color: #666;
+            color: #999;
         }
 
-        .result-actions {
-            display: flex;
-            gap: 0.5rem;
+        /* 无结果状态 */
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
         }
 
-        .action-btn {
-            padding: 0.2rem 0.5rem;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
-            background: white;
-            color: #666;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
         }
 
-        .action-btn:hover {
-            background: #f8f9fa;
+        .no-results-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
             color: #333;
         }
 
-        .action-btn.report {
-            color: #ea4335;
-            border-color: #ea4335;
+        .no-results-desc {
+            color: #666;
+            margin-bottom: 2rem;
         }
 
-        /* 侧边广告 */
-        .sidebar {
-            position: fixed;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 200px;
+        .suggestions {
             background: white;
             border-radius: 8px;
-            padding: 1rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            z-index: 50;
         }
 
-        .ad-banner {
-            text-align: center;
-            color: #666;
-            font-size: 0.8rem;
+        .suggestions-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
         }
 
-        /* 分页 */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin: 2rem 0;
-        }
-
-        .page-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid #dadce0;
-            background: white;
-            color: #666;
+        .suggestion-item {
+            color: #1a73e8;
             text-decoration: none;
-            border-radius: 4px;
-            transition: all 0.3s ease;
+            display: block;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
         }
 
-        .page-btn:hover {
-            background: #f8f9fa;
-        }
-
-        .page-btn.active {
-            background: #4285f4;
-            color: white;
-            border-color: #4285f4;
+        .suggestion-item:hover {
+            color: #3367d6;
+            text-decoration: underline;
         }
 
         /* 响应式设计 */
-        @media (max-width: 1024px) {
-            .sidebar {
-                display: none;
-            }
-        }
-
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -339,26 +264,12 @@
                 max-width: 100%;
             }
 
-            .search-meta {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
+            .results-grid {
+                grid-template-columns: 1fr;
             }
 
-            .filters {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .result-header {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .result-meta {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
+            .main-content {
+                padding: 1rem;
             }
         }
     </style>
@@ -370,282 +281,208 @@
         <div class="header-content">
             <a href="/" class="logo">资源搜</a>
             <div class="search-bar">
-                <input type="text" class="search-input" id="searchInput" placeholder="搜索资源..." value="水浒无间道">
+                <input type="text" class="search-input" id="searchInput" placeholder="搜索资源...">
                 <button class="search-btn" onclick="performSearch()">搜索</button>
             </div>
         </div>
     </header>
 
-    <!-- 搜索信息 -->
-    <div class="search-info">
-        <div class="search-meta">
-            <div class="result-count">
-                <strong>懒盘搜索</strong>为您提供关于<strong>水浒无间道</strong>搜索结果<strong>415</strong>条，耗时：<strong>90ms</strong>
-            </div>
+    <!-- 主要内容 -->
+    <main class="main-content">
+        <div class="search-info">
+            <div class="result-count" id="searchInfo">正在搜索...</div>
         </div>
 
-        <!-- 筛选器 -->
-        <div class="filters">
-            <div class="filter-group">
-                <select class="filter-select">
-                    <option>所有网盘</option>
-                    <option>百度网盘</option>
-                    <option>夸克网盘</option>
-                    <option>阿里云盘</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <select class="filter-select">
-                    <option>不限时间</option>
-                    <option>最近一天</option>
-                    <option>最近一周</option>
-                    <option>最近一月</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <select class="filter-select">
-                    <option>过滤类型</option>
-                    <option>视频</option>
-                    <option>音频</option>
-                    <option>文档</option>
-                    <option>软件</option>
-                </select>
-            </div>
-            <div class="filter-checkbox">
-                <input type="checkbox" id="preciseTEXT">
-                <label for="preciseTEXT">精确模式</label>
-            </div>
-        </div>
-    </div>
-
-    <!-- 搜索结果 -->
-    <div class="results-container">
-        <!-- 结果项1 -->
-        <div class="result-item" onclick="openDetail('result1')">
-            <div class="result-header">
-                <div class="result-icon">🎬</div>
-                <div class="result-content">
-                    <div class="result-title">水浒无间道【2004 电视剧】</div>
-                    <div class="result-description">
-                        1d-vb.rmvb<br>
-                        file:水浒无间道[国语23].d-vb.rmvb<br>
-                        file:水浒无间道[国语02].d-vb.rmvb...
-                    </div>
-                    <div class="result-tags">
-                        <span class="tag">影视</span>
-                        <span class="tag">电视剧</span>
-                        <span class="tag">水浒</span>
-                        <span class="tag">国语</span>
-                    </div>
-                </div>
-            </div>
-            <div class="result-meta">
-                <div class="result-source">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFYSURBVDiNpZM9SwNBEIafgxCwsLGwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQ" class="source-icon" alt="夸克网盘">
-                    <span>夸克网盘</span>
-                </div>
-                <div class="result-date">2025-03-12</div>
-                <div class="result-actions">
-                    <button class="action-btn" onclick="event.stopPropagation(); shareResult(this)">关注公众</button>
-                    <button class="action-btn report" onclick="event.stopPropagation(); reportResult(this)">举报</button>
-                </div>
-            </div>
+        <!-- 搜索结果 -->
+        <div class="results-grid" id="resultsGrid">
+            <!-- 结果将在这里动态生成 -->
         </div>
 
-        <!-- 结果项2 -->
-        <div class="result-item" onclick="openDetail('result2')">
-            <div class="result-header">
-                <div class="result-icon">🎬</div>
-                <div class="result-content">
-                    <div class="result-title">水浒无间道【2004 电视剧】</div>
-                    <div class="result-description">
-                        水浒无间道[国语21].d-vb.rmvb<br>
-                        file:水浒无间道[国语20].d-vb.rmvb<br>
-                        file:水浒无间道[国语19].d-vb.rmvb...
-                    </div>
-                    <div class="result-tags">
-                        <span class="tag">影视</span>
-                        <span class="tag">电视剧</span>
-                        <span class="tag">水浒传</span>
-                        <span class="tag">视频</span>
-                        <span class="tag">图片</span>
-                        <span class="tag">Excel</span>
-                        <span class="tag">办公</span>
-                    </div>
-                </div>
-            </div>
-            <div class="result-meta">
-                <div class="result-source">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFYSURBVDiNpZM9SwNBEIafgxCwsLGwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQ" class="source-icon" alt="夸克网盘">
-                    <span>夸克网盘</span>
-                </div>
-                <div class="result-date">2024-11-09</div>
-                <div class="result-actions">
-                    <button class="action-btn" onclick="event.stopPropagation(); shareResult(this)">关注公众</button>
-                    <button class="action-btn report" onclick="event.stopPropagation(); reportResult(this)">举报</button>
-                </div>
+        <!-- 无结果状态 -->
+        <div class="no-results" id="noResults" style="display: none;">
+            <div class="no-results-icon">🔍</div>
+            <div class="no-results-title">未找到相关资源</div>
+            <div class="no-results-desc">尝试使用不同的关键词或查看推荐搜索</div>
+            
+            <div class="suggestions">
+                <div class="suggestions-title">推荐搜索：</div>
+                <a href="/search.html?q=电影" class="suggestion-item">热门电影资源</a>
+                <a href="/search.html?q=电视剧" class="suggestion-item">最新电视剧</a>
+                <a href="/search.html?q=软件" class="suggestion-item">实用软件下载</a>
+                <a href="/search.html?q=学习资料" class="suggestion-item">学习资料大全</a>
             </div>
         </div>
-
-        <!-- 结果项3 -->
-        <div class="result-item" onclick="openDetail('result3')">
-            <div class="result-header">
-                <div class="result-icon">🎥</div>
-                <div class="result-content">
-                    <div class="result-title">无间道风云 (2006)</div>
-                    <div class="result-description">
-                        高清重制版本，包含花絮和幕后制作特辑<br>
-                        file:无间道风云[1080p].mp4<br>
-                        file:幕后花絮.mp4...
-                    </div>
-                    <div class="result-tags">
-                        <span class="tag">电影</span>
-                        <span class="tag">高清</span>
-                        <span class="tag">1080p</span>
-                        <span class="tag">花絮</span>
-                    </div>
-                </div>
-            </div>
-            <div class="result-meta">
-                <div class="result-source">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFYSURBVDiNpZM9SwNBEIafgxCwsLGwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQ" class="source-icon" alt="百度网盘">
-                    <span>百度网盘</span>
-                </div>
-                <div class="result-date">2024-08-15</div>
-                <div class="result-actions">
-                    <button class="action-btn" onclick="event.stopPropagation(); shareResult(this)">关注公众</button>
-                    <button class="action-btn report" onclick="event.stopPropagation(); reportResult(this)">举报</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 更多结果项... -->
-        <div class="result-item" onclick="openDetail('result4')">
-            <div class="result-header">
-                <div class="result-icon">📁</div>
-                <div class="result-content">
-                    <div class="result-title">水浒传完整版合集【经典版本】</div>
-                    <div class="result-description">
-                        包含多个版本的水浒传影视资源<br>
-                        folder:水浒传1998版/<br>
-                        folder:水浒传2011版/<br>
-                        folder:相关电影合集/
-                    </div>
-                    <div class="result-tags">
-                        <span class="tag">合集</span>
-                        <span class="tag">经典</span>
-                        <span class="tag">多版本</span>
-                    </div>
-                </div>
-            </div>
-            <div class="result-meta">
-                <div class="result-source">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFYSURBVDiNpZM9SwNBEIafgxCwsLGwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLCwsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQsLCwsLBQ" class="source-icon" alt="阿里云盘">
-                    <span>阿里云盘</span>
-                </div>
-                <div class="result-date">2024-06-20</div>
-                <div class="result-actions">
-                    <button class="action-btn" onclick="event.stopPropagation(); shareResult(this)">关注公众</button>
-                    <button class="action-btn report" onclick="event.stopPropagation(); reportResult(this)">举报</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 侧边广告 -->
-    <div class="sidebar">
-        <div class="ad-banner">
-            <div style="background: #f0f8ff; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
-                <div style="font-weight: bold; color: #1e90ff;">VIP特权</div>
-                <div style="font-size: 0.7rem; margin: 0.5rem 0;">无限制高速下载</div>
-                <button style="background: #1e90ff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; width: 100%; cursor: pointer;">立即开通</button>
-            </div>
-            <div style="font-size: 0.7rem; color: #999;">广告</div>
-        </div>
-    </div>
-
-    <!-- 分页 -->
-    <div class="pagination">
-        <a href="#" class="page-btn">上一页</a>
-        <a href="#" class="page-btn active">1</a>
-        <a href="#" class="page-btn">2</a>
-        <a href="#" class="page-btn">3</a>
-        <a href="#" class="page-btn">4</a>
-        <a href="#" class="page-btn">5</a>
-        <a href="#" class="page-btn">下一页</a>
-    </div>
+    </main>
 
     <script>
-        // 模拟搜索数据
-        const searchResults = {
-            result1: {
-                title: "水浒无间道【2004 电视剧】",
-                files: [
-                    { name: "水浒无间道[国语01].rmvb", size: "425MB" },
-                    { name: "水浒无间道[国语02].rmvb", size: "428MB" },
-                    { name: "水浒无间道[国语03].rmvb", size: "430MB" },
-                    { name: "水浒无间道[国语04].rmvb", size: "432MB" },
-                    { name: "水浒无间道[国语05].rmvb", size: "429MB" }
-                ],
-                shareUrl: "https://pan.quark.cn/s/abc123def456",
-                extractCode: "1234",
-                source: "夸克网盘"
-            },
-            result2: {
-                title: "水浒无间道【2004 电视剧】完整版",
-                files: [
-                    { name: "水浒无间道[国语21].rmvb", size: "445MB" },
-                    { name: "水浒无间道[国语22].rmvb", size: "440MB" },
-                    { name: "水浒无间道[国语23].rmvb", size: "438MB" },
-                    { name: "水浒无间道[国语24].rmvb", size: "442MB" }
-                ],
-                shareUrl: "https://pan.quark.cn/s/def456ghi789",
-                extractCode: "5678",
-                source: "夸克网盘"
-            }
+        // 模拟搜索结果数据
+        const mockResults = {
+            "水浒": [
+                {
+                    title: "水浒传【1998版】【经典国产剧】",
+                    description: "央视版水浒传，经典之作，包含全43集高清资源。演员阵容强大，制作精良，是水浒题材的经典之作。",
+                    source: "夸克网盘",
+                    tags: ["电视剧", "经典", "国产", "高清"],
+                    size: "15.2GB",
+                    date: "2024-12-01",
+                    files: 43,
+                    icon: "📺"
+                },
+                {
+                    title: "水浒无间道【2004】【港台电视剧】",
+                    description: "结合水浒传和无间道元素的创新剧集，剧情紧凑，演技精湛。",
+                    source: "百度网盘", 
+                    tags: ["电视剧", "港台", "创新"],
+                    size: "8.5GB",
+                    date: "2024-11-15",
+                    files: 20,
+                    icon: "🎬"
+                }
+            ],
+            "电影": [
+                {
+                    title: "2024年度热门电影合集",
+                    description: "包含2024年最受欢迎的电影资源，4K高清画质，多种格式可选。",
+                    source: "阿里云盘",
+                    tags: ["电影", "2024", "4K", "合集"],
+                    size: "125.6GB", 
+                    date: "2024-12-20",
+                    files: 50,
+                    icon: "🎥"
+                }
+            ],
+            "软件": [
+                {
+                    title: "办公软件精品合集【2024最新版】",
+                    description: "包含Office、Photoshop、AutoCAD等常用办公软件的最新版本。",
+                    source: "迅雷云盘",
+                    tags: ["软件", "办公", "设计", "最新版"],
+                    size: "12.3GB",
+                    date: "2024-12-18",
+                    files: 15,
+                    icon: "💻"
+                }
+            ]
         };
 
-        // 打开详情页面
-        function openDetail(resultId) {
-            const result = searchResults[resultId];
-            if (result) {
-                // 构建详情页URL
-                const detailUrl = `/detail.html?id=${resultId}&title=${encodeURIComponent(result.title)}`;
-                window.open(detailUrl, '_blank');
-            }
+        // 获取搜索参数
+        function getSearchQuery() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('q') || '';
         }
 
-        // 执行搜索
+        // 模拟搜索
+        function searchResources(query) {
+            if (!query) return [];
+            
+            // 简单的关键词匹配
+            let results = [];
+            Object.keys(mockResults).forEach(key => {
+                if (query.includes(key) || key.includes(query)) {
+                    results = results.concat(mockResults[key]);
+                }
+            });
+
+            // 如果没有精确匹配，返回一些通用结果
+            if (results.length === 0) {
+                results = [
+                    {
+                        title: `${query} 相关资源合集`,
+                        description: `为您找到与"${query}"相关的优质资源，包含多种格式和版本。`,
+                        source: "综合搜索",
+                        tags: ["搜索结果", "相关资源"],
+                        size: "未知",
+                        date: "2024-12-20",
+                        files: "多个",
+                        icon: "📂"
+                    }
+                ];
+            }
+
+            return results;
+        }
+
+        // 渲染搜索结果
+        function renderResults(results, query) {
+            const resultsGrid = document.getElementById('resultsGrid');
+            const noResults = document.getElementById('noResults');
+            const searchInfo = document.getElementById('searchInfo');
+
+            if (results.length === 0) {
+                resultsGrid.style.display = 'none';
+                noResults.style.display = 'block';
+                searchInfo.innerHTML = `未找到与"<strong>${query}</strong>"相关的资源`;
+                return;
+            }
+
+            resultsGrid.style.display = 'grid';
+            noResults.style.display = 'none';
+            searchInfo.innerHTML = `找到与"<strong>${query}</strong>"相关的资源 <strong>${results.length}</strong> 个`;
+
+            resultsGrid.innerHTML = results.map(result => `
+                <div class="result-card" onclick="openDetail('${result.title}')">
+                    <div class="result-header">
+                        <div class="result-icon">${result.icon}</div>
+                        <div class="result-info">
+                            <div class="result-title">${result.title}</div>
+                            <div class="result-source">
+                                <span>📁</span>
+                                <span>${result.source}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-description">${result.description}</div>
+                    
+                    <div class="result-tags">
+                        ${result.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    
+                    <div class="result-footer">
+                        <div class="result-size">📦 ${result.size} · ${result.files} 个文件</div>
+                        <div class="result-date">${result.date}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 打开详情页面
+        function openDetail(title) {
+            alert(`正在打开"${title}"的详情页面...\n\n🚧 详情页面开发中，敬请期待！`);
+        }
+
+        // 执行新搜索
         function performSearch() {
             const query = document.getElementById('searchInput').value.trim();
             if (query) {
-                // 重新加载页面或更新搜索结果
-                window.location.href = `/search?q=${encodeURIComponent(query)}`;
+                window.location.href = `/search.html?q=${encodeURIComponent(query)}`;
             }
         }
 
-        // 分享结果
-        function shareResult(btn) {
-            alert('关注公众号获取更多资源！');
-        }
-
-        // 举报结果
-        function reportResult(btn) {
-            if (confirm('确定要举报这个资源吗？')) {
-                alert('举报已提交，感谢您的反馈！');
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            const query = getSearchQuery();
+            
+            if (query) {
+                document.getElementById('searchInput').value = query;
+                document.title = `${query} - 搜索结果 - 资源搜`;
+                
+                // 模拟搜索延迟
+                setTimeout(() => {
+                    const results = searchResources(query);
+                    renderResults(results, query);
+                }, 800);
+            } else {
+                // 没有搜索词，跳转回首页
+                window.location.href = '/';
             }
-        }
+        });
 
-        // 搜索框回车事件
+        // 回车搜索
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 performSearch();
             }
-        });
-
-        // 页面加载完成
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('搜索结果页面加载完成');
         });
     </script>
 </body>
