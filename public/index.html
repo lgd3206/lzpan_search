@@ -373,7 +373,7 @@
             <p class="subtitle">专业的网盘资源搜索引擎</p>
         </div>
 
-        <!-- 搜索引擎状态指示器 -->
+        <!-- 搜索引擎状态指示器（优化版） -->
         <div class="engine-status" style="
             position: fixed;
             bottom: 20px;
@@ -381,16 +381,51 @@
             background: white;
             padding: 1rem;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             font-size: 0.8rem;
-            max-width: 200px;
+            max-width: 220px;
             z-index: 100;
+            border-left: 4px solid #4285f4;
         ">
-            <div style="font-weight: 600; margin-bottom: 0.5rem;">搜索引擎状态</div>
+            <div style="
+                font-weight: 600; 
+                margin-bottom: 0.8rem;
+                color: #333;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            ">
+                <span style="
+                    width: 8px;
+                    height: 8px;
+                    background: #4285f4;
+                    border-radius: 50%;
+                    animation: pulse 2s infinite;
+                "></span>
+                搜索引擎状态
+            </div>
             <div id="engine-status-list">
                 <!-- 状态列表将动态生成 -->
             </div>
+            <div style="
+                margin-top: 0.8rem;
+                padding-top: 0.8rem;
+                border-top: 1px solid #f0f0f0;
+                font-size: 0.7rem;
+                color: #666;
+                text-align: center;
+            ">
+                实时监控 · 智能切换
+            </div>
         </div>
+
+        <style>
+            @keyframes pulse {
+                0% { opacity: 1; }
+                50% { opacity: 0.5; }
+                100% { opacity: 1; }
+            }
+        </style>
 
         <!-- 搜索区域 -->
         <div class="search-section">
@@ -583,9 +618,9 @@
         // 执行搜索（增强版）
         async function performSearch(query) {
             const searchQuery = query || document.getElementById('searchInput').value.trim();
-    if (!searchQuery) {
-        alert('请输入搜索关键词');
-        return;
+            if (!searchQuery) {
+                showMessage('请输入搜索关键词', 'warning');
+                return;
             }
 
             // 显示搜索状态
@@ -636,73 +671,205 @@
             }
         }
 
-        // 备用搜索方案
+        // 备用搜索方案（优化版）
         function showBackupSearch(query) {
             const backupSearches = [
-                { name: '百度', url: `https://www.baidu.com/s?wd=${encodeURIComponent(query + ' 网盘')}` },
-                { name: '必应', url: `https://www.bing.com/search?q=${encodeURIComponent(query + ' 网盘')}` },
-                { name: 'Google', url: `https://www.google.com/search?q=${encodeURIComponent(query + ' 网盘')}` }
+                { 
+                    name: '百度搜索', 
+                    url: `https://www.baidu.com/s?wd=${encodeURIComponent(query + ' 网盘 资源')}`,
+                    icon: '🔍',
+                    color: '#4285f4'
+                },
+                { 
+                    name: '必应搜索', 
+                    url: `https://www.bing.com/search?q=${encodeURIComponent(query + ' 网盘 下载')}`,
+                    icon: '🌐', 
+                    color: '#0078d4'
+                },
+                { 
+                    name: 'Google搜索', 
+                    url: `https://www.google.com/search?q=${encodeURIComponent(query + ' 网盘 分享')}`,
+                    icon: '🔎',
+                    color: '#34a853'
+                }
             ];
             
             const backupHtml = `
-                <div class="backup-search" style="
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background: white;
-                    padding: 2rem;
-                    border-radius: 12px;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                    z-index: 1000;
-                    max-width: 400px;
-                    width: 90%;
-                    text-align: center;
-                ">
-                    <h3 style="margin-bottom: 1rem; color: #333;">专业搜索引擎暂时不可用</h3>
-                    <p style="margin-bottom: 1.5rem; color: #666;">为您提供备用搜索方案：</p>
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
-                        ${backupSearches.map(search => 
-                            `<a href="${search.url}" target="_blank" style="
-                                background: #4285f4;
-                                color: white;
-                                padding: 0.5rem 1rem;
-                                border-radius: 6px;
-                                text-decoration: none;
-                                font-size: 0.9rem;
-                            ">${search.name}搜索</a>`
-                        ).join('')}
-                    </div>
-                    <button onclick="closeBackupSearch()" style="
-                        margin-top: 1rem;
-                        background: #f8f9fa;
-                        border: 1px solid #dadce0;
-                        padding: 0.5rem 1rem;
-                        border-radius: 6px;
-                        cursor: pointer;
-                    ">关闭</button>
-                </div>
-                <div class="backup-overlay" style="
+                <div class="backup-search-overlay" style="
                     position: fixed;
                     top: 0;
                     left: 0;
                     width: 100%;
                     height: 100%;
-                    background: rgba(0,0,0,0.5);
-                    z-index: 999;
-                " onclick="closeBackupSearch()"></div>
+                    background: rgba(0,0,0,0.6);
+                    z-index: 9999;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    animation: fadeIn 0.3s ease;
+                " onclick="closeBackupSearch()">
+                    <div class="backup-search-modal" style="
+                        background: white;
+                        padding: 2rem;
+                        border-radius: 16px;
+                        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                        max-width: 480px;
+                        width: 90%;
+                        text-align: center;
+                        animation: slideUp 0.3s ease;
+                        position: relative;
+                    " onclick="event.stopPropagation()">
+                        <div style="
+                            width: 60px;
+                            height: 60px;
+                            background: linear-gradient(135deg, #ff6b35, #f7931e);
+                            border-radius: 50%;
+                            margin: 0 auto 1.5rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.5rem;
+                        ">⚠️</div>
+                        
+                        <h3 style="
+                            margin-bottom: 1rem; 
+                            color: #333;
+                            font-size: 1.3rem;
+                            font-weight: 600;
+                        ">专业搜索引擎暂时不可用</h3>
+                        
+                        <p style="
+                            margin-bottom: 2rem; 
+                            color: #666;
+                            line-height: 1.6;
+                            font-size: 0.95rem;
+                        ">为您提供备用搜索方案：</p>
+                        
+                        <div style="
+                            display: flex; 
+                            gap: 0.8rem; 
+                            flex-wrap: wrap; 
+                            justify-content: center;
+                            margin-bottom: 2rem;
+                        ">
+                            ${backupSearches.map(search => `
+                                <a href="${search.url}" target="_blank" style="
+                                    background: ${search.color};
+                                    color: white;
+                                    padding: 0.8rem 1.5rem;
+                                    border-radius: 8px;
+                                    text-decoration: none;
+                                    font-size: 0.9rem;
+                                    font-weight: 500;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 0.5rem;
+                                    transition: all 0.3s ease;
+                                    flex: 1;
+                                    min-width: 120px;
+                                    justify-content: center;
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.2)'" 
+                                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                                    <span>${search.icon}</span>
+                                    <span>${search.name}</span>
+                                </a>
+                            `).join('')}
+                        </div>
+                        
+                        <div style="
+                            background: #f8f9fa;
+                            padding: 1rem;
+                            border-radius: 8px;
+                            margin-bottom: 1.5rem;
+                            border-left: 4px solid #4285f4;
+                        ">
+                            <div style="
+                                font-size: 0.85rem;
+                                color: #666;
+                                text-align: left;
+                            ">
+                                💡 <strong>搜索技巧：</strong><br>
+                                • 关键词 + "网盘" + "分享"<br>
+                                • 添加文件格式：如 "mp4" "pdf"<br>
+                                • 使用引号精确搜索："${query}"
+                            </div>
+                        </div>
+                        
+                        <button onclick="closeBackupSearch()" style="
+                            background: #f8f9fa;
+                            border: 1px solid #dadce0;
+                            color: #666;
+                            padding: 0.8rem 2rem;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            font-size: 0.9rem;
+                            transition: all 0.3s ease;
+                            width: 100%;
+                        " onmouseover="this.style.background='#e8f0fe'; this.style.color='#4285f4'" 
+                           onmouseout="this.style.background='#f8f9fa'; this.style.color='#666'">
+                            关闭
+                        </button>
+                        
+                        <button onclick="closeBackupSearch()" style="
+                            position: absolute;
+                            top: 1rem;
+                            right: 1rem;
+                            background: none;
+                            border: none;
+                            font-size: 1.5rem;
+                            cursor: pointer;
+                            color: #999;
+                            width: 32px;
+                            height: 32px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        " onmouseover="this.style.background='#f0f0f0'" 
+                           onmouseout="this.style.background='none'">×</button>
+                    </div>
+                </div>
+                
+                <style>
+                    @keyframes fadeIn {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+                    @keyframes slideUp {
+                        from { transform: translateY(30px); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+                </style>
             `;
             
             document.body.insertAdjacentHTML('beforeend', backupHtml);
+            
+            // 记录备用搜索使用情况
+            console.log(`备用搜索触发: ${query}`);
         }
 
-        // 关闭备用搜索弹窗
+        // 关闭备用搜索弹窗（优化版）
         window.closeBackupSearch = function() {
-            const backup = document.querySelector('.backup-search');
-            const overlay = document.querySelector('.backup-overlay');
-            if (backup) backup.remove();
-            if (overlay) overlay.remove();
+            const overlay = document.querySelector('.backup-search-overlay');
+            if (overlay) {
+                overlay.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    if (overlay.parentNode) {
+                        overlay.remove();
+                    }
+                }, 300);
+            }
         }
+
+        // 添加淡出动画样式
+        const fadeOutStyle = document.createElement('style');
+        fadeOutStyle.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+        `;
+        document.head.appendChild(fadeOutStyle);
 
         // 显示消息提示
         function showMessage(message, type = 'info') {
