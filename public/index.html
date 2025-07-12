@@ -291,6 +291,10 @@
             .search-section {
                 max-width: 100%;
             }
+            
+            .engine-status {
+                display: none !important;
+            }
         }
 
         @media (max-width: 480px) {
@@ -309,6 +313,29 @@
                 width: 100%;
                 padding: 1rem;
             }
+            
+            .search-message {
+                top: 10px !important;
+                right: 10px !important;
+                left: 10px !important;
+                max-width: none !important;
+            }
+        }
+
+        /* 消息动画 */
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        /* 搜索引擎状态样式 */
+        .engine-status {
+            transition: all 0.3s ease;
+        }
+
+        .engine-status:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         /* 加载动画 */
@@ -344,6 +371,25 @@
         <div class="logo-section">
             <h1 class="logo">资源搜</h1>
             <p class="subtitle">专业的网盘资源搜索引擎</p>
+        </div>
+
+        <!-- 搜索引擎状态指示器 -->
+        <div class="engine-status" style="
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 0.8rem;
+            max-width: 200px;
+            z-index: 100;
+        ">
+            <div style="font-weight: 600; margin-bottom: 0.5rem;">搜索引擎状态</div>
+            <div id="engine-status-list">
+                <!-- 状态列表将动态生成 -->
+            </div>
         </div>
 
         <!-- 搜索区域 -->
@@ -410,27 +456,43 @@
             "灵笼第三季", "逆爱"
         ];
 
-        // 搜索引擎配置
+        // 搜索引擎配置（更新为可靠的引擎）
         const searchEngines = [
             {
-                name: "盘古侠",
-                url: "https://www.panguxia.com",
-                searchUrl: "https://www.panguxia.com/search?keyword="
-            },
-            {
-                name: "混合盘", 
-                url: "https://hunhepan.com",
-                searchUrl: "https://hunhepan.com/search?keyword="
-            },
-            {
                 name: "猫狸盘搜",
-                url: "https://www.maolicat.com", 
-                searchUrl: "https://www.maolicat.com/search?keyword="
+                url: "https://www.maolicat.com",
+                searchUrl: "https://www.maolicat.com/search?keyword=",
+                status: "active"
             },
             {
                 name: "易搜",
-                url: "https://yiso.fun",
-                searchUrl: "https://yiso.fun/search?keyword="
+                url: "https://yiso.fun", 
+                searchUrl: "https://yiso.fun/search?keyword=",
+                status: "active"
+            },
+            {
+                name: "混合盘",
+                url: "https://hunhepan.com",
+                searchUrl: "https://hunhepan.com/search?keyword=",
+                status: "active"
+            },
+            {
+                name: "夸夸搜",
+                url: "https://kuakua.app",
+                searchUrl: "https://kuakua.app/search?keyword=",
+                status: "active"
+            },
+            {
+                name: "UP云搜",
+                url: "https://www.upyunso.com",
+                searchUrl: "https://www.upyunso.com/search?keyword=",
+                status: "backup"
+            },
+            {
+                name: "盘古侠",
+                url: "https://www.panguxia.com",
+                searchUrl: "https://www.panguxia.com/search?keyword=",
+                status: "maintenance" // 标记为维护中
             }
         ];
 
@@ -482,28 +544,214 @@
             ).join('');
         }
 
-        // 执行搜索
-        function performSearch(query) {
+        // 智能搜索引擎选择
+        function getAvailableEngine() {
+            // 优先选择状态为active的引擎
+            const activeEngines = searchEngines.filter(engine => engine.status === 'active');
+            if (activeEngines.length > 0) {
+                return activeEngines[Math.floor(Math.random() * activeEngines.length)];
+            }
+            
+            // 如果没有active引擎，选择backup引擎
+            const backupEngines = searchEngines.filter(engine => engine.status === 'backup');
+            if (backupEngines.length > 0) {
+                return backupEngines[0];
+            }
+            
+            // 最后选择任意可用引擎
+            return searchEngines[0];
+        }
+
+        // 检测搜索引擎状态
+        async function checkEngineStatus(engine) {
+            try {
+                // 使用图片预加载方式检测网站可用性
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = () => resolve(true);
+                    img.onerror = () => resolve(false);
+                    img.src = engine.url + '/favicon.ico?' + Date.now();
+                    
+                    // 3秒超时
+                    setTimeout(() => resolve(false), 3000);
+                });
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // 执行搜索（增强版）
+        async function performSearch(query) {
             const searchQuery = query || document.getElementById('searchInput').value.trim();
             if (!searchQuery) {
-                alert('请输入搜索关键词');
+                showMessage('请输入搜索关键词', 'warning');
                 return;
             }
 
-            // 显示加载动画
+            // 显示搜索状态
+            showMessage('正在为您搜索...', 'info');
             showLoading();
 
-            // 智能选择搜索引擎并跳转
-            const searchUrl = currentEngine.searchUrl + encodeURIComponent(searchQuery);
-            
-            // 在新标签页打开搜索结果
-            window.open(searchUrl, '_blank');
-            
-            // 隐藏加载动画
-            hideLoading();
+            try {
+                // 智能选择搜索引擎
+                let selectedEngine = getAvailableEngine();
+                
+                // 检测搜索引擎可用性
+                const isAvailable = await checkEngineStatus(selectedEngine);
+                
+                if (!isAvailable && searchAttempts < maxSearchAttempts) {
+                    searchAttempts++;
+                    showMessage(`${selectedEngine.name} 暂时不可用，正在切换到备用搜索引擎...`, 'warning');
+                    
+                    // 尝试其他搜索引擎
+                    const otherEngines = searchEngines.filter(e => e.name !== selectedEngine.name && e.status !== 'maintenance');
+                    if (otherEngines.length > 0) {
+                        selectedEngine = otherEngines[0];
+                    }
+                }
 
-            // 添加到搜索历史（可选）
-            addToSearchHistory(searchQuery);
+                // 构建搜索URL
+                const searchUrl = selectedEngine.searchUrl + encodeURIComponent(searchQuery);
+                
+                // 显示成功消息
+                showMessage(`使用 ${selectedEngine.name} 为您搜索"${searchQuery}"`, 'success');
+                
+                // 在新标签页打开搜索结果
+                window.open(searchUrl, '_blank');
+                
+                // 添加到搜索历史
+                addToSearchHistory(searchQuery);
+                
+                // 重置搜索尝试次数
+                searchAttempts = 0;
+                
+            } catch (error) {
+                console.error('搜索错误:', error);
+                showMessage('搜索服务暂时不可用，请稍后重试', 'error');
+                
+                // 备用搜索方案 - 直接百度搜索
+                showBackupSearch(searchQuery);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // 备用搜索方案
+        function showBackupSearch(query) {
+            const backupSearches = [
+                { name: '百度', url: `https://www.baidu.com/s?wd=${encodeURIComponent(query + ' 网盘')}` },
+                { name: '必应', url: `https://www.bing.com/search?q=${encodeURIComponent(query + ' 网盘')}` },
+                { name: 'Google', url: `https://www.google.com/search?q=${encodeURIComponent(query + ' 网盘')}` }
+            ];
+            
+            const backupHtml = `
+                <div class="backup-search" style="
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: white;
+                    padding: 2rem;
+                    border-radius: 12px;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                    z-index: 1000;
+                    max-width: 400px;
+                    width: 90%;
+                    text-align: center;
+                ">
+                    <h3 style="margin-bottom: 1rem; color: #333;">专业搜索引擎暂时不可用</h3>
+                    <p style="margin-bottom: 1.5rem; color: #666;">为您提供备用搜索方案：</p>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                        ${backupSearches.map(search => 
+                            `<a href="${search.url}" target="_blank" style="
+                                background: #4285f4;
+                                color: white;
+                                padding: 0.5rem 1rem;
+                                border-radius: 6px;
+                                text-decoration: none;
+                                font-size: 0.9rem;
+                            ">${search.name}搜索</a>`
+                        ).join('')}
+                    </div>
+                    <button onclick="closeBackupSearch()" style="
+                        margin-top: 1rem;
+                        background: #f8f9fa;
+                        border: 1px solid #dadce0;
+                        padding: 0.5rem 1rem;
+                        border-radius: 6px;
+                        cursor: pointer;
+                    ">关闭</button>
+                </div>
+                <div class="backup-overlay" style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.5);
+                    z-index: 999;
+                " onclick="closeBackupSearch()"></div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', backupHtml);
+        }
+
+        // 关闭备用搜索弹窗
+        window.closeBackupSearch = function() {
+            const backup = document.querySelector('.backup-search');
+            const overlay = document.querySelector('.backup-overlay');
+            if (backup) backup.remove();
+            if (overlay) overlay.remove();
+        }
+
+        // 显示消息提示
+        function showMessage(message, type = 'info') {
+            // 移除现有消息
+            const existingMsg = document.querySelector('.search-message');
+            if (existingMsg) existingMsg.remove();
+            
+            const colors = {
+                success: '#4caf50',
+                warning: '#ff9800', 
+                error: '#f44336',
+                info: '#2196f3'
+            };
+            
+            const messageHtml = `
+                <div class="search-message" style="
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${colors[type]};
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                    z-index: 1000;
+                    max-width: 300px;
+                    font-size: 0.9rem;
+                    animation: slideIn 0.3s ease;
+                ">
+                    ${message}
+                </div>
+                <style>
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                </style>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', messageHtml);
+            
+            // 3秒后自动消失
+            setTimeout(() => {
+                const msg = document.querySelector('.search-message');
+                if (msg) {
+                    msg.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => msg.remove(), 300);
+                }
+            }, 3000);
         }
 
         // 快速搜索
