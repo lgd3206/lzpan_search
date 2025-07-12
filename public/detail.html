@@ -1,1 +1,788 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资源详情 - 水浒无间道</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 顶部导航 */
+        .header {
+            background: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #4285f4;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            background: #4285f4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .login-btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .vip-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        /* 主要内容区域 */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            padding: 2rem 1rem;
+        }
+
+        /* 文件列表区域 */
+        .file-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .file-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .file-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .file-meta {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .view-toggle {
+            display: flex;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .view-btn {
+            background: white;
+            border: none;
+            padding: 0.3rem 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .view-btn.active {
+            background: #4285f4;
+            color: white;
+        }
+
+        .file-list {
+            padding: 0;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.3s ease;
+        }
+
+        .file-item:hover {
+            background: #f8f9fa;
+        }
+
+        .file-checkbox {
+            margin-right: 1rem;
+        }
+
+        .file-icon {
+            width: 32px;
+            height: 32px;
+            background: #4285f4;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 1rem;
+            font-size: 1rem;
+        }
+
+        .file-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-name {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-details {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .file-size {
+            color: #666;
+            font-size: 0.9rem;
+            min-width: 80px;
+            text-align: right;
+            margin-right: 2rem;
+        }
+
+        .file-date {
+            color: #666;
+            font-size: 0.9rem;
+            min-width: 120px;
+            text-align: right;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* 保存提示卡片 */
+        .save-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .save-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .save-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .save-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .save-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .save-size {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .save-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .save-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* 下载工具卡片 */
+        .tool-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .tool-header {
+            background: #f8f9fa;
+            padding: 1rem;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .tool-content {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .tool-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .tool-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-desc {
+            color: #666;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+
+        /* 链接信息 */
+        .link-info {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+
+        .link-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .link-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .link-item:last-child {
+            border-bottom: none;
+        }
+
+        .link-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .link-value {
+            color: #333;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #f8f9fa;
+            border: 1px solid #dadce0;
+            color: #666;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        .copy-btn:hover {
+            background: #e8f0fe;
+            color: #4285f4;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .file-item {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .file-size,
+            .file-date {
+                min-width: auto;
+                text-align: left;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="brand">
+                <div class="brand-icon">🔍</div>
+                <span>资源搜</span>
+            </a>
+            <div class="nav-actions">
+                <a href="#" class="login-btn">登录账号</a>
+                <a href="#" class="vip-btn">会员中心</a>
+                <span>打开客户端</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- 文件列表区域 -->
+        <div class="file-section">
+            <div class="file-header">
+                <div class="file-title">水浒无间道【2004 电视剧】</div>
+                <div class="file-meta">
+                    <div class="meta-item">
+                        <span>📁</span>
+                        <span>共 1 个文件</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>💾</span>
+                        <span>永久存储</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>👤</span>
+                        <span>老张*23年以前资源002的分享</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>🔄</span>
+                        <span>举报</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <span style="color: #666;">全部文件</span>
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn active">📋</button>
+                    <button class="view-btn">📂</button>
+                    <button class="view-btn">🔲</button>
+                </div>
+            </div>
+
+            <div class="file-list">
+                <div class="file-item">
+                    <input type="checkbox" class="file-checkbox" checked>
+                    <div class="file-icon">📁</div>
+                    <div class="file-info">
+                        <div class="file-name">水浒无间道【2004 电视剧】</div>
+                        <div class="file-details">文件夹</div>
+                    </div>
+                    <div class="file-size">1项</div>
+                    <div class="file-date">2025-05-07 13:13</div>
+                </div>
+
+                <!-- 展开的文件夹内容 -->
+                <div class="file-item" style="padding-left: 3rem; background: #f8f9fa;">
+                    <input type="checkbox" class="file-checkbox">
+                    <div class="file-icon">🎬</div>
+                    <div class="file-info">
+                        <div class="file-name">水浒无间道01.rmvb</div>
+                        <div class="file-details">视频文件</div>
+                    </div>
+                    <div class="file-size">425MB</div>
+                    <div class="file-date">2025-05-07 13:10</div>
+                </div>
+
+                <div class="file-item" style="padding-left: 3rem; background: #f8f9fa;">
+                    <input type="checkbox" class="file-checkbox">
+                    <div class="file-icon">🎬</div>
+                    <div class="file-info">
+                        <div class="file-name">水浒无间道02.rmvb</div>
+                        <div class="file-details">视频文件</div>
+                    </div>
+                    <div class="file-size">428MB</div>
+                    <div class="file-date">2025-05-07 13:10</div>
+                </div>
+
+                <div class="file-item" style="padding-left: 3rem; background: #f8f9fa;">
+                    <input type="checkbox" class="file-checkbox">
+                    <div class="file-icon">🎬</div>
+                    <div class="file-info">
+                        <div class="file-name">水浒无间道03.rmvb</div>
+                        <div class="file-details">视频文件</div>
+                    </div>
+                    <div class="file-size">430MB</div>
+                    <div class="file-date">2025-05-07 13:10</div>
+                </div>
+
+                <div class="file-item" style="padding-left: 3rem; background: #f8f9fa;">
+                    <input type="checkbox" class="file-checkbox">
+                    <div class="file-icon">🎬</div>
+                    <div class="file-info">
+                        <div class="file-name">水浒无间道04.rmvb</div>
+                        <div class="file-details">视频文件</div>
+                    </div>
+                    <div class="file-size">432MB</div>
+                    <div class="file-date">2025-05-07 13:10</div>
+                </div>
+
+                <div class="file-item" style="padding-left: 3rem; background: #f8f9fa;">
+                    <input type="checkbox" class="file-checkbox">
+                    <div class="file-icon">🎬</div>
+                    <div class="file-info">
+                        <div class="file-name">水浒无间道05.rmvb</div>
+                        <div class="file-details">视频文件</div>
+                    </div>
+                    <div class="file-size">429MB</div>
+                    <div class="file-date">2025-05-07 13:10</div>
+                </div>
+            </div>
+
+            <!-- 底部操作栏 -->
+            <div class="toolbar">
+                <div style="color: #666;">转存到：夸克网盘</div>
+                <div style="display: flex; gap: 1rem;">
+                    <button style="background: #f8f9fa; border: 1px solid #dadce0; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">📥 下载</button>
+                    <button class="save-btn" style="width: auto; padding: 0.5rem 2rem;">💾 保存到网盘</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <!-- 保存提示卡片 -->
+            <div class="save-card">
+                <div class="save-content">
+                    <div class="save-title">新用户</div>
+                    <div class="save-subtitle">保存成功，立享</div>
+                    <div class="save-size">1024GB</div>
+                    <button class="save-btn" onclick="saveToNetdisk()">立即下载</button>
+                </div>
+            </div>
+
+            <!-- 下载工具 -->
+            <div class="tool-card">
+                <div class="tool-header">🔧 推荐工具</div>
+                <div class="tool-content">
+                    <div class="tool-icon">⚡</div>
+                    <div class="tool-name">夸克</div>
+                    <div class="tool-desc">高速下载神器</div>
+                    <button class="tool-btn" onclick="downloadTool()">立即下载</button>
+                </div>
+            </div>
+
+            <!-- 链接信息 -->
+            <div class="link-info">
+                <div class="link-title">📋 链接信息</div>
+                <div class="link-item">
+                    <span class="link-label">网盘类型</span>
+                    <span class="link-value">夸克网盘</span>
+                </div>
+                <div class="link-item">
+                    <span class="link-label">分享链接</span>
+                    <span class="link-value">
+                        https://pan.quark.cn/s/abc123def456
+                        <button class="copy-btn" onclick="copyLink()">复制</button>
+                    </span>
+                </div>
+                <div class="link-item">
+                    <span class="link-label">提取码</span>
+                    <span class="link-value">
+                        1234
+                        <button class="copy-btn" onclick="copyCode()">复制</button>
+                    </span>
+                </div>
+                <div class="link-item">
+                    <span class="link-label">文件大小</span>
+                    <span class="link-value">2.1GB</span>
+                </div>
+                <div class="link-item">
+                    <span class="link-label">更新时间</span>
+                    <span class="link-value">2025-05-07</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 保存到网盘
+        function saveToNetdisk() {
+            // 模拟保存过程
+            const saveBtn = event.target;
+            const originalText = saveBtn.textContent;
+            
+            saveBtn.textContent = '保存中...';
+            saveBtn.disabled = true;
+            
+            setTimeout(() => {
+                saveBtn.textContent = '保存成功 ✓';
+                saveBtn.style.background = 'rgba(76, 175, 80, 0.8)';
+                
+                // 显示成功提示
+                showNotification('资源已成功保存到您的网盘！', 'success');
+                
+                setTimeout(() => {
+                    saveBtn.textContent = originalText;
+                    saveBtn.disabled = false;
+                    saveBtn.style.background = '';
+                }, 2000);
+            }, 1500);
+        }
+
+        // 下载工具
+        function downloadTool() {
+            showNotification('正在为您下载夸克客户端...', 'info');
+            // 这里可以添加实际的下载逻辑
+            window.open('https://www.quark.cn/download', '_blank');
+        }
+
+        // 复制链接
+        function copyLink() {
+            const link = 'https://pan.quark.cn/s/abc123def456';
+            navigator.clipboard.writeText(link).then(() => {
+                showNotification('链接已复制到剪贴板', 'success');
+            }).catch(() => {
+                // 降级方案
+                const textarea = document.createElement('textarea');
+                textarea.value = link;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showNotification('链接已复制到剪贴板', 'success');
+            });
+        }
+
+        // 复制提取码
+        function copyCode() {
+            const code = '1234';
+            navigator.clipboard.writeText(code).then(() => {
+                showNotification('提取码已复制到剪贴板', 'success');
+            }).catch(() => {
+                // 降级方案
+                const textarea = document.createElement('textarea');
+                textarea.value = code;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showNotification('提取码已复制到剪贴板', 'success');
+            });
+        }
+
+        // 显示通知
+        function showNotification(message, type = 'info') {
+            // 移除现有通知
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            const colors = {
+                success: '#4caf50',
+                warning: '#ff9800',
+                error: '#f44336',
+                info: '#2196f3'
+            };
+
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${colors[type]};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 6px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1000;
+                max-width: 300px;
+                font-size: 0.9rem;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+
+            // 添加动画样式
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+
+            document.body.appendChild(notification);
+
+            // 3秒后自动消失
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // 文件选择处理
+        document.querySelectorAll('.file-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                updateSelection();
+            });
+        });
+
+        function updateSelection() {
+            const checkedBoxes = document.querySelectorAll('.file-checkbox:checked');
+            console.log(`已选择 ${checkedBoxes.length} 个文件`);
+        }
+
+        // 页面加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('资源详情页面加载完成');
+            
+            // 模拟加载过程
+            setTimeout(() => {
+                showNotification('资源加载完成，可以开始保存或下载', 'success');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
